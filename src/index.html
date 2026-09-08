@@ -43,12 +43,12 @@ h1 { font: 500 clamp(32px, 7.3vw, 100px)/.96 Georgia, serif; letter-spacing: -.0
 #menu h2 { font: 500 2.4em Georgia, serif; margin: 0 0 .6em; }
 #menu p { max-width: 35em; margin: 1em auto; }
 [hidden] { display: none !important; }
-.drift { animation: drift 7s ease-in-out infinite alternate; }
+.drift { animation: drift 90s linear infinite alternate; }
 .turn { transform-box: fill-box; transform-origin: center; animation: turn 14s linear infinite; }
 .flow { animation: flow 1.8s linear infinite; }
 .rain { animation: rain .7s linear infinite; }
 @keyframes turn { to { transform: rotate(360deg); } }
-@keyframes drift { to { transform: translateY(-1.3px); } }
+@keyframes drift { to { transform: translateX(3px); } }
 @keyframes flow { to { stroke-dashoffset: -12; } }
 @keyframes rain { to { transform: translate(-2px, 6px); } }
 @media (prefers-reduced-motion: reduce) { *, *:after { animation: none !important; } }
@@ -65,46 +65,55 @@ h1 { font: 500 clamp(32px, 7.3vw, 100px)/.96 Georgia, serif; letter-spacing: -.0
 <div id="frame">
 <svg id="stage" viewBox="0 0 160 100" aria-label="Adventure scene">
 <defs>
+ <!-- Shared joints and contours keep clothes, limbs and shading aligned. -->
+ <g id="Figure">
+  <path d="M7 2L13 2 14 6 12 9 12 11 16 13 18 19 19 23 18 27 16 29 16 26 17 23 15 20 14 17 14 25 6 25 6 17 5 20 3 23 4 26 4 29 2 27 1 23 2 19 4 13 8 11 8 9 6 7 6 3Z"/>
+ </g>
+ <g id="Legs">
+  <path fill="#202b38" d="M6 24L14 24 15 33 14 38 17 40 17 41 12 41 11 33 10 28 9 33 8 40 3 41 1 40 5 38 5 33Z"/>
+ </g>
+ <g id="Tunic">
+  <path d="M8 11L10 13 12 11 16 13 18 19 15 20 14 17 14 24 15 28 5 28 6 24 6 17 5 20 2 19 4 13Z"/>
+ </g>
  <g id="Nell">
-  <path fill="#202b38" d="M5 25L4 37 1 39 1 40 7 40 9 27 11 37 10 40 17 40 17 38 14 36 14 25Z"/>
-  <path fill="#cf794f" d="M5 11L12 10 17 15 14 28 3 28 4 19 1 24 0 23 1 15Z"/>
-  <path fill="#914c43" d="M11 12L12 25 16 27 14 28 7 28 8 15Z"/>
-  <path fill="#efc19a" d="M5 3L12 3 13 8 10 12 6 10Z M15 15L18 23 16 27 14 26 15 23 13 17Z M2 17L3 23 1 27 0 26 0 23Z"/>
-  <path fill="#303044" d="M3 10L3 3 6 0 12 1 14 5 10 4 6 5 5 11Z"/>
-  <path fill="#eabf75" d="M4 11L8 13 12 10 12 13 8 16 4 13Z"/>
-  <path fill="#5a453e" d="M3 23L14 22 14 24 3 25Z M12 15L14 15 8 24 6 24Z"/>
-  <path fill="#dab17f" d="M8 23L14 23 14 29 7 28Z"/>
+  <use href="#Figure" fill="#efc19a"/>
+  <use href="#Legs"/>
+  <use href="#Tunic" fill="#cf794f"/>
+  <path fill="#914c43" d="M12 13L14 17 14 24 15 28 10 28 11 24Z"/>
+  <path fill="#303044" d="M5 10L5 3 8 0 13 1 15 5 12 3 8 3 7 7 7 11Z"/>
+  <path fill="#eabf75" d="M8 11L10 13 12 11 13 12 10 15 7 12Z"/>
+  <path fill="#5a453e" d="M6 24H14V25H6Z M14 12L15 13 9 26 8 25Z"/>
+  <path fill="#dab17f" d="M8 25H14V29H8Z"/>
  </g>
  <g id="Iris">
-  <path fill="#262e37" d="M4 28L4 38 0 40 7 40 10 29 12 39 17 40 18 38 15 35 15 27Z"/>
-  <path fill="#58756c" d="M5 10L11 10 16 14 17 32 2 32 3 16Z"/>
-  <path fill="#344e50" d="M11 12L10 32 17 32 14 17Z"/>
-  <path fill="#ca9e7f" d="M5 3L13 4 12 10 8 13 5 9Z M3 14L0 25 4 28 5 26 3 24 6 17Z M14 14L19 24 16 29 14 28 16 24 12 17Z"/>
-  <path fill="#c8c8b1" d="M4 10L2 5 6 0 12 1 15 7 11 5 6 5 6 11Z"/>
-  <path fill="#c3ad7d" d="M5 14L6 30 14 30 12 15 10 17 8 17Z"/>
-  <path stroke="#8d7660" stroke-width="1.2" d="M18 24L20 40"/>
+  <use href="#Figure" fill="#ca9e7f"/>
+  <use href="#Legs"/>
+  <use href="#Tunic" fill="#58756c"/>
+  <path fill="#344e50" d="M12 13L14 17 14 24 16 32 4 32 6 24 6 17 8 13 8 28 12 28Z"/>
+  <path fill="#c8c8b1" d="M5 9L4 5 6 1 12 0 15 3 14 7 12 3 8 3 6 6 6 10Z"/>
+  <path fill="#c3ad7d" d="M8 13L10 15 12 13 12 24 14 30H6L8 24Z"/>
+  <path stroke="#8d7660" stroke-width="1" d="M18 26L19 41"/>
  </g>
  <g id="Vale">
-  <path fill="#232435" d="M7 30L7 43 2 45 9 45 12 32 14 43 13 45 21 45 20 43 18 42 18 29Z"/>
-  <path fill="#53506a" d="M7 12L15 12 21 17 18 27 22 36 5 36 6 26 3 20Z"/>
-  <path fill="#333349" d="M14 14L13 34 22 36 18 27 21 17Z"/>
-  <path fill="#f2d6b4" d="M8 4L16 3 17 10 14 14 9 12Z M3 18L0 28 5 31 6 29 3 27 7 20Z M19 18L24 27 29 26 30 28 23 30 16 22Z"/>
-  <path fill="#c4ad7b" d="M7 6L6 3 9 1 16 1 19 4 17 7 15 4 10 4 9 7Z M8 13L12 16 16 12 14 20 11 20Z M6 26L18 26 18 28 6 28Z"/>
-  <path fill="#292638" d="M10 8L11 8 11 9 10 9Z M14 8L15 8 15 9 14 9Z"/>
-  <path stroke="#c6a36b" stroke-width="1" d="M28 26L27 45"/>
-  <circle cx="28" cy="25" r="1.7" fill="#e6c47e"/>
+  <use href="#Figure" fill="#f2d6b4"/>
+  <use href="#Legs"/>
+  <use href="#Tunic" fill="#53506a"/>
+  <path fill="#53506a" d="M6 24H14L17 33 11 34 10 31 9 34 3 33Z"/>
+  <path fill="#333349" d="M12 13L14 17 14 24 17 33 11 34 10 31 11 24Z"/>
+  <path fill="#c4ad7b" d="M6 6L5 3 8 0 13 1 15 4 14 7 12 3 8 3 7 6Z M8 11L10 13 12 11 11 18 9 18Z M6 24H14V25H6Z"/>
+  <path stroke="#c6a36b" stroke-width="1" d="M18 26L19 41"/>
+  <circle cx="18" cy="25" r="1.5" fill="#e6c47e"/>
  </g>
  <g id="Unicorn">
-  <path fill="#acb9bd" d="M24 24L26 36 24 40 29 40 30 25 43 25 47 36 46 40 51 40 49 34 48 22Z"/>
-  <path fill="#a9b7b7" d="M46 15Q59 11 58 31L54 27 54 34 51 29Q57 15 46 19Z"/>
-  <path fill="#f6efd7" d="M7 10L9 5 13 8 17 8 22 18Q30 14 44 15L49 20 46 28 32 29 23 27 18 22 15 14 11 18 4 18 2 15Z"/>
-  <path fill="#d5d8c7" d="M4 16L11 15 16 11 21 24 31 27 44 25 46 20 49 20 46 28 32 29 23 27 18 22 15 14 11 18 4 18Z"/>
-  <path fill="#f6efd7" d="M24 25L25 32 21 39 26 39 29 32 29 26Z M42 26L40 34 41 39 46 39 44 36 46 27Z"/>
-  <path fill="#677482" d="M21 39L26 39 26 41 20 41Z M41 39L46 39 47 41 41 41Z M24 40L29 40 29 42 24 42Z M46 40L51 40 51 42 46 42Z"/>
-  <path fill="#a6bcbb" d="M13 8L18 7 23 13 25 21 21 25 20 19 17 17 18 14Z"/>
-  <path fill="#f7d88c" d="M7 11L1 0 11 9Z"/>
-  <path stroke="#b68e67" stroke-width=".5" d="M4 4L5 7M6 6L7 10"/>
-  <path fill="#e9e5ce" d="M13 9L12 3 16 7Z"/>
+  <path fill="#acb9bd" d="M24 24L29 25 28 33 30 40 26 40 24 33Z M42 24L48 24 48 32 51 40 47 40 44 33Z"/>
+  <path fill="#a6bcbb" d="M44 18Q57 16 56 26L55 34 52 31 53 25Q54 21 47 24Z"/>
+  <path fill="#f6efd7" d="M3 14L9 9 12 5 15 7 18 7 24 17L32 18 42 17 47 19 49 24 46 30 44 34 45 40 41 40 40 33 42 29 32 31 25 29 25 32 23 34V36L22 40H18L19 36V34L21 32 20 25 17 19 15 13 10 17 4 18 2 16Z"/>
+  <path fill="#d5d8c7" d="M2 16L4 18 10 17 15 13 17 19 20 25 21 32 25 29 24 24 20 17 15 11 9 15Z M47 19L49 24 46 30 44 34 40 33 42 29 46 24Z"/>
+  <path fill="#677482" d="M18 40H22V42H17Z M26 40H30L31 42H26Z M41 40H45L46 42H41Z M47 40H51L52 42H47Z"/>
+  <path fill="#a6bcbb" d="M15 7L18 7 21 12 24 17 24 24 20 25 21 19 18 15 17 11Z"/>
+  <path fill="#f7d88c" d="M8 10L2 0 12 7Z"/>
+  <path fill="#b68e67" d="M2 0L10 8 8 10Z"/>
+  <path fill="#f6efd7" d="M13 7L13 2 16 7Z"/>
   <path fill="#333447" d="M8 12L10 11 10 12 8 13Z"/>
  </g>
  <g id="Bird">
@@ -120,9 +129,9 @@ h1 { font: 500 clamp(32px, 7.3vw, 100px)/.96 Georgia, serif; letter-spacing: -.0
  <g id="Oil"><path fill="#c88455" d="M4 10L18 10 22 24 0 24Z"/><path fill="#e1ac6b" d="M7 6H15V10H7ZM19 13L27 5 28 6 23 20Z"/><path stroke="#8d5b45" fill="none" stroke-width="2" d="M4 13C-4 10-4 22 2 21"/><path fill="#efce8e" d="M9 13L7 18 11 20 14 18 11 13Z"/></g>
  <g id="Spanner"><path fill="#a7c2c4" d="M6 0L5 7 10 10 15 6 14 0 19 5 18 11 13 15 6 30 1 28 9 12 4 10 2 4Z"/><path fill="#63858f" d="M8 15L3 28 5 29 11 16Z"/></g>
  <g id="Hair"><path d="M3 25C28 2 0-5 4 14S30 26 25 3M6 28C30 8 9 0 10 12S27 21 21 0" fill="none" stroke="#e4e4c9" stroke-width="1.5"/><path fill="#bf7f5e" d="M1 23L10 24 10 27 1 26Z"/></g>
- <g id="Ledger"><path fill="#282e42" d="M1 5L21 0 27 23 7 29Z"/><path fill="#ede0b4" d="M5 8L24 4 27 21 8 26Z"/><path fill="#8c4c4c" d="M1 3L21 0 24 21 5 27Z"/><path fill="#d9b57a" d="M6 8L17 5 18 7 7 10ZM8 12L18 9 19 11 9 14Z"/></g>
+ <g id="Ledger"><path fill="#282e42" d="M2 5L22 1 26 25 6 29Z"/><path fill="#ede0b4" d="M6 24L25 20 26 25 6 29Z"/><path fill="#8c4c4c" d="M2 1L22 1 25 20 6 24Z"/><path fill="#d9b57a" d="M6 8L17 5 18 7 7 10ZM8 12L18 9 19 11 9 14Z"/></g>
  <g id="Prism"><path fill="#b1d4cc" d="M14 0L29 25 0 25Z"/><path fill="#e6efdb" d="M14 0L12 20 0 25Z"/><path fill="#80b0bf" d="M14 0L29 25 12 20Z"/><path fill="#e5ae9a" d="M0 25L12 20 29 25Z"/></g>
- <g id="Cloud"><path fill="#ccb8ad" d="M0 8Q2 2 9 4Q13-4 21 2Q29-2 32 6Q42 4 45 11L-4 11Z"/></g>
+ <g id="Cloud"><path fill="#ccb8ad" d="M0 10Q2 4 9 5Q12-2 20 2Q28 0 31 6Q38 5 42 10Z"/></g>
  <g id="Wheel"><circle cx="0" cy="0" r="12" fill="#5c4540" stroke="#ad805b" stroke-width="2"/><circle r="8" fill="#2e3940"/><path stroke="#ab805e" stroke-width="2" d="M-11 0H11M0-11V11M-8-8L8 8M-8 8L8-8"/><circle r="2.5" fill="#d5af75"/></g>
  <g id="Sun"><circle r="3" fill="#f0cb80"/><path stroke="#f0cb80" d="M0-7V-5M0 5V7M-7 0H-5M5 0H7M-5-5L-4-4M4 4L5 5M-5 5L-4 4M4-4L5-5"/></g>
  <g id="Drop"><path fill="#87bec6" d="M0-7Q-9 4 0 6Q9 4 0-7Z"/></g>

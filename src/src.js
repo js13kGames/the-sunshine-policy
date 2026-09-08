@@ -60,10 +60,6 @@ function rect(fill, x, y, w, h, extra = "") {
 	svg(`<rect fill="${fill}" x="${x}" y="${y}" width="${w}" height="${h}" ${extra}/>`)
 }
 
-function label(text, x, y, size = 2, color = "#e8d6ae", extra = "") {
-	svg(`<text x="${x}" y="${y}" font-family="sans-serif" font-size="${size}" fill="${color}" ${extra}>${text}</text>`)
-}
-
 function set(id, x, y, size = 1, name, action) {
 	const g = document.createElementNS(NS, "g")
 	g.setAttribute("transform", `translate(${x} ${y}) scale(${size})`)
@@ -121,11 +117,11 @@ function protagonist(x = 46, y = 55, s = .8) {
 
 function sky(night = false) {
 	rect(night ? "#30384f" : "#8b9b9a", 0, 0, 160, 100)
-	set("Cloud", 8, 11, .9).classList.add("drift")
-	set("Cloud", 100, 18, 1.2).classList.add("drift")
+	set("Cloud", 8, 11, .9).firstElementChild.classList.add("drift")
+	set("Cloud", 100, 18, 1.2).firstElementChild.classList.add("drift")
 	svg(`<circle cx="123" cy="17" r="6" fill="#f0c58c"/>`)
-	path("#707e86", "M0 50L18 37 26 42 44 26 63 46 79 34 93 42 110 30 131 48 145 37 160 42V100H0Z")
-	path("#565e6d", "M0 61L23 45 46 57 67 42 88 56 106 48 127 57 151 43 160 46V100H0Z")
+	path("#707e86", "M0 50L20 38 34 42 60 26 90 48 118 34 160 52V100H0Z")
+	path("#565e6d", "M0 62L28 48 52 56 88 40 122 58 148 48 160 52V100H0Z")
 }
 
 function grass(x, y, color = "#ac986e") {
@@ -142,26 +138,26 @@ function rainbow(x, y, radius, width = 1.4) {
 const scenes = {
 	Court: function() {
 		sky()
-		path("#b6aa8c", "M0 55L36 51 109 54 160 48V100H0Z")
-		path("#9a8d77", "M0 68L85 60 160 70V100H0Z")
-		path("#d3c3a2", "M0 0H22L20 55 27 57 26 61H0Z M143 0H160V66L136 62 136 58 141 56Z")
-		path("#b5a385", "M0 0H8L7 59H0Z M151 0H160V66L151 64Z")
-		path("#d3c3a2", "M0 52L160 51V56L0 57Z")
-		for (let x = 29; x < 140; x += 12) {
+		path("#b6aa8c", "M0 60H160V100H0Z")
+		path("#9a8d77", "M0 72L80 64 160 72V100H0Z")
+		path("#d3c3a2", "M0 0H20V56H24V62H0Z M140 0H160V62H136V56H140Z")
+		path("#b5a385", "M0 0H6V56H20V58H0Z M152 0H160V62H152Z")
+		path("#d3c3a2", "M20 50H140V53H20Z")
+		for (let x = 28; x < 140; x += 16) {
 			rect("#c5b595", x, 53, 3, 10)
 		}
-		path("#d3c3a2", "M0 62L160 61V65L0 66Z")
-		path("#81705f", "M100 81L126 82 135 85 105 85Z")
-		path("#c6ad84", "M102 67L124 67 126 82 104 82Z")
-		path("#ead5a4", "M99 65L128 65 126 69 101 69Z")
+		path("#d3c3a2", "M0 62H160V65H0Z")
+		path("#81705f", "M102 64L108 68 110 82 104 78Z")
+		path("#c6ad84", "M108 68H128L126 82H110Z")
+		path("#ead5a4", "M102 64H122L128 68H108Z")
 		if (!state.prism) {
-			set("Prism", 108, 55, .38, "The minister's glass paperweight", () => say("Vale", "My paperweight. It keeps the weather reports from blowing away. Such gloomy little reports."))
+			set("Prism", 110, 57, .38, "The minister's glass paperweight", () => say("Vale", "My paperweight. It keeps the weather reports from blowing away. Such gloomy little reports."))
 		}
-		set("Vale", 86, 40, .9, "Talk to Minister Vale", talkVale)
+		set("Vale", 86, 40, 1, "Talk to Minister Vale", talkVale)
 		protagonist(49, 54)
-		path("#57575c", "M27 75L36 75 36 78 27 78Z M29 78L29 86H31V78Z")
+		path("#57575c", "M26 74H36V76H26Z M30 76H32V86H30Z")
 		if (!state.taken.includes("Biscuit")) {
-			set("Biscuit", 28, 70, .23, "Take the neglected biscuit", () => take("Biscuit", "A royal biscuit. Hard enough to inherit the throne."))
+			set("Biscuit", 28, 68, .25, "Take the neglected biscuit", () => take("Biscuit", "A royal biscuit. Hard enough to inherit the throne."))
 		}
 		exit("toMill", "Down to the rain mill", 10, 87, "Mill", -1)
 	},
@@ -171,138 +167,128 @@ const scenes = {
 		path("#b3a07d", "M30 100L73 65 88 66 66 100Z")
 		path("#495e64", "M113 64L125 65 157 100 121 100Z")
 		path(state.water ? "#82afb3" : "#7a8076", "M116 65L121 65 147 100 130 100Z")
-		path("#b5a78a", "M53 29L93 24 98 69 52 72Z")
-		path("#8d826e", "M93 24L111 35 113 64 98 69Z")
-		path("#3b4855", "M45 31L73 12 103 22 115 36 91 29 53 35Z")
-		path("#53626a", "M45 31L73 12 103 22 91 29 73 20 53 35Z")
-		path("#37434a", "M72 49Q80 43 87 48L88 68 71 70Z")
+		path("#b5a78a", "M52 34L72 18 92 34V72H52Z")
+		path("#8d826e", "M92 34L112 26V64L92 72Z")
+		path("#3b4855", "M72 16L94 8 116 28 94 36Z")
+		path("#53626a", "M48 36L72 16 94 36H90L72 22 54 36Z")
+		path("#37434a", "M70 72V54Q78 42 86 54V72Z")
 		rect("#424e53", 60, 38, 7, 9)
 		path("#c4b38c", "M62 38H64V47H62Z")
-		const wheel = set("Wheel", 107, 58, 1.3)
+		const wheel = set("Wheel", 105, 58, 1.2)
+		wheel.setAttribute("transform", "translate(105 58) matrix(.8 -.3 0 1.2 0 0)")
 		if (state.water) {
 			wheel.firstElementChild.classList.add("turn")
-			path("none", "M119 44V67L151 101", 'stroke="#b5d5cb" stroke-width="1" stroke-dasharray="3 3" class="flow"')
+			path("none", "M114 44V68L140 100", 'stroke="#b5d5cb" stroke-width="1" stroke-dasharray="3 3" class="flow"')
 		}
-		path("#494f49", "M9 79L9 68 32 68 32 71 12 72 12 80Z")
-		label("RAIN MILL", 56, 55, 2.2)
 		set("Iris", 31, 49, .9, "Talk to Iris, the old keeper", talkIris)
-		protagonist(67, 58)
+		protagonist(58, 58)
 		grass(13, 90)
 		grass(102, 91)
-		hotspot("workshop", "Enter the keeper's workshop", 71, 46, 17, 23, () => show("Workshop"))
+		hotspot("workshop", "Enter the keeper's workshop", 70, 46, 16, 24, () => show("Workshop"))
 		exit("palace", "Back to the palace", 12, 49, "Court", -1)
 		exit("meadow", "Follow the hoofprints", 12, 89, "Meadow", -1)
 		exit("sluice", "Along the spillway", 146, 85, "Sluice")
 	},
 	Meadow: function() {
 		sky(true)
-		path("#8d8d74", "M0 74Q45 50 91 63L160 56V100H0Z")
-		path("#70765f", "M0 87Q40 69 89 83L160 71V100H0Z")
+		path("#8d8d74", "M0 72Q44 54 88 64L160 56V100H0Z")
+		path("#70765f", "M0 88Q44 72 88 80L160 72V100H0Z")
 		path("#b1a184", "M0 88L45 76 42 82 10 100H0Z")
-		path("#3f4148", "M119 78L126 67 125 43 111 32 92 30 89 27 109 28 116 30 108 17 110 14 122 31 131 37 133 22 128 12 130 11 137 23 135 37 147 28 158 25 160 27 148 32 136 43 134 67 142 81 131 77 123 82Z")
-		path("#595450", "M126 66L130 43 112 30 116 30 133 42 132 67 136 76 131 74Z")
-		path("#987851", "M136 36L149 35 152 37 144 41 135 39Z")
+		path("#3f4148", "M120 82L128 68 130 44 116 30 94 28 92 26 116 26 108 14 110 12 122 28 133 38 134 24 130 12 132 10 138 24 137 38 150 30 160 28V30L150 34 136 46 134 68 142 82 132 78Z")
+		path("#595450", "M133 38H137L136 46 134 68 142 82 132 78 132 68 134 44Z")
+		path("#987851", "M136 36Q144 34 152 36L148 40H140Z")
 		if (!state.taken.includes("Key")) {
 			set("Key", 142, 34, .22)
 		}
-		set("Bird", 132, 26, .5, "A magpie guarding something brass", talkBird)
+		set("Bird", 135, 30, .4, "A magpie guarding something brass", talkBird)
 		set("Unicorn", 74, 45, 1, "Talk to the unicorn", talkUnicorn)
 		if (!state.free) {
 			// Individual links keep the iron chain visible against the grass.
 			for (let i = 0; i < 9; ++i) {
-				svg(`<ellipse cx="${100 + i * 3.5}" cy="${82 + Math.sin(i / 8 * Math.PI) * 3 - i * .7}" rx="2" ry=".9" fill="none" stroke="#35434d" stroke-width=".8"/>`)
+				svg(`<ellipse cx="${99 + i * 4}" cy="${80 + Math.sin(i / 8 * Math.PI) * 3 - i * .25}" rx="2" ry=".9" fill="none" stroke="#35434d" stroke-width=".8"/>`)
 			}
-			path("#485762", "M96 79L103 79 102 83 96 83Z")
-			hotspot("shackle", "The iron shackle", 95, 77, 10, 9, () => say("Nell", "Locked. The keyhole is brass. So is that thing in the magpie's nest."))
+			path("#485762", "M93 79H97V81H93Z")
+			hotspot("shackle", "The iron shackle", 92, 77, 10, 9, () => say("Nell", "Locked. The keyhole is brass. So is that thing in the magpie's nest."))
 		}
 		protagonist(43, 57)
 		grass(67, 88)
 		grass(150, 86)
-		grass(16, 74)
 		exit("mill", "Back to the mill", 10, 84, "Mill", -1)
 	},
 	Workshop: function() {
 		rect("#414d53", 0, 0, 160, 100)
-		path("#68756e", "M17 0H23V65H17Z M132 0H140V74H132Z M0 14L160 4V10L0 20Z")
-		path("#354148", "M0 72L83 61 160 71V100H0Z")
-		path("#afbaa2", "M29 25L55 23V50L29 51Z")
-		path("#87988c", "M30 48L44 33 54 43V49Z")
-		path("#46565a", "M40 24H43V51H40Z M29 36H55V39H29Z")
-		path("#ad805b", "M87 61L144 64 145 69 85 66Z M90 66H94V89H90Z M136 69H140V90H136Z")
-		path("#795b49", "M85 66L145 69V74L85 71Z")
-		path("#a49e83", "M94 23L130 25 128 49 92 47Z")
+		path("#68756e", "M16 0H22V70H16Z M138 0H144V70H138Z M0 12H160V18H0Z")
+		path("#354148", "M0 70H160V100H0Z")
+		path("#afbaa2", "M28 26H54V50H28Z")
+		path("#87988c", "M28 46L40 34 54 46V50H28Z")
+		path("#46565a", "M40 26H42V50H40Z M28 36H54V38H28Z")
+		path("#ad805b", "M88 62L138 58 146 64 96 68Z M98 72L102 71V88H98Z M138 69L142 68V86H138Z")
+		path("#795b49", "M88 62L96 68 146 64V68L96 72 88 66Z")
+		path("#a49e83", "M92 26H132V46H92Z")
 		set("Sun", 100, 35, .65)
 		set("Drop", 111, 35, .65)
 		set("Horn", 123, 35, .65)
-		label("→", 104, 36, 3)
-		label("→", 115, 36, 3)
-		label("LIGHT · RAIN · HORN", 95, 44, 1.9, "#3b4648")
 		hotspot("diagram", "Read the rainbow diagram", 91, 22, 40, 29, readDiagram)
 		if (!state.taken.includes("Oil")) {
 			set("Oil", 92, 53, .45, "Take the oil can", () => take("Oil", "It says: FOR STUBBORN MACHINERY. Pity it doesn't work on ministers."))
 		}
 		if (!state.taken.includes("Spanner")) {
-			set("Spanner", 127, 59, .38, "Take the spanner", () => take("Spanner", "A spanner. Finally, a tool I was actually trained to use."))
+			set("Spanner", 126, 55, .38, "Take the spanner", () => take("Spanner", "A spanner. Finally, a tool I was actually trained to use.")).firstElementChild.setAttribute("transform", "translate(0 8) scale(1 .5) rotate(60 10 15)")
 		}
-		path("#56625c", "M17 76L20 61 35 61 38 76Z")
-		path("#232f38", "M20 61L22 58 34 58 35 61Z")
+		path("#56625c", "M18 62H36L34 76H20Z")
+		path("#232f38", "M18 62Q27 58 36 62Q27 66 18 62Z")
 		protagonist(60, 53, .9)
 		exit("outside", "Outside to Iris", 10, 87, "Mill", -1)
 	},
 	Sluice: function() {
 		sky()
-		path("#4b5d64", "M0 34L49 40 54 73 0 85Z M101 37L160 31V100L111 84Z")
-		path("#737c77", "M0 35L46 38 52 65 39 62 30 45 0 42Z M109 40L160 31V40L117 48Z")
+		path("#4b5d64", "M0 36L50 40 54 74 0 84Z M102 40L160 32V100L110 84Z")
+		path("#737c77", "M0 36L50 40 48 46 0 42Z M102 40L160 32V38L104 46Z")
 		path("#2d404e", "M0 85L70 67 111 84 160 90V100H0Z")
-		path("#a4a082", "M49 25L104 28 109 81 50 75Z")
-		path("#777d70", "M94 28L104 28 109 81 95 77Z")
-		path("#3d4a4e", "M61 47Q77 31 91 49L92 73 61 70Z")
-		path("#697975", state.water ? "M62 46L90 47V53L62 52Z" : "M62 46L90 47V71L62 69Z")
-		for (let x = 63; x < 92; x += 6) {
-			path("#34434b", `M${x} 49v${state.water ? 3 : 20}h1v-${state.water ? 3 : 20}Z`)
+		path("#a4a082", "M50 26H98V78H50Z")
+		path("#777d70", "M98 26L108 32V84L98 78Z")
+		path("#3d4a4e", "M60 72V48Q76 24 92 48V72Z")
+		path("#697975", state.water ? "M60 48H92V52H60Z" : "M60 48H92V72H60Z")
+		for (let x = 64; x < 92; x += 8) {
+			path("#34434b", `M${x} 48v${state.water ? 4 : 24}h1v-${state.water ? 4 : 24}Z`)
 		}
-		path("#7d8175", "M20 74L59 69 61 73 23 79Z M20 77L59 72 58 76 20 81Z")
-		path("none", "M34 73V57L55 52", 'stroke="#c09a69" stroke-width="2"')
+		path("#7d8175", "M20 74L60 68V72L20 78Z M20 78L60 72V75L20 81Z")
+		path("none", "M39 74V59H50", 'stroke="#c09a69" stroke-width="2"')
 		set("Wheel", 39, 59, .65, "The rusted sluice wheel", turnSluice)
 		if (state.water) {
-			path("#80b1b7", "M67 71L84 72 100 99H51Z")
-			path("none", "M72 73L59 100M77 73L80 100M82 75L92 100", 'stroke="#c9ddc7" stroke-dasharray="4 2" stroke-width="1" class="flow"')
+			path("#80b1b7", "M64 72H88L104 100H48Z")
+			path("none", "M68 74L56 100M76 74V100M84 74L96 100", 'stroke="#c9ddc7" stroke-dasharray="4 2" stroke-width="1" class="flow"')
 		}
-		label("KEEP CLOSED", 59, 31, 2.7, "#343e44")
-		label("BY ROYAL ORDER", 60, 35, 1.8, "#343e44")
-		hotspot("notice", "Read the royal notice", 55, 26, 41, 13, () => say("Nell", "KEEP CLOSED BY ROYAL ORDER. Someone added: even when the crops die. That's Iris's handwriting."))
 		protagonist(15, 48, .75)
 		exit("mill", "Back to the mill", 9, 85, "Mill", -1)
 		exit("engine", "The maintenance passage", 139, 81, "Engine")
 	},
 	Engine: function() {
 		rect("#293846", 0, 0, 160, 100)
-		path("#354752", "M10 0H17V76H10Z M145 0H152V83H145Z M0 20L160 15V20L0 26Z")
-		path("#25313d", "M0 76L71 64 160 81V100H0Z")
-		path("#876d58", "M56 17H62V62H56Z M59 57H90V63H59Z M122 26H128V70H122Z")
-		path("#6e8987", "M68 37L106 34 110 72 67 74Z")
-		path("#4c676a", "M106 34L121 43V71L110 76 110 72Z")
-		path("#a0b7a2", "M67 33L107 30 121 40 106 43 66 45Z")
-		path("#202f40", "M74 47L101 46 103 64 74 66Z")
+		path("#354752", "M10 0H16V76H10Z M146 0H152V76H146Z M0 18H160V24H0Z")
+		path("#354148", "M0 64H160V100H0Z")
+		path("#876d58", "M56 18H62V58H70V64H56Z M122 26H128V70H122Z")
+		path("#6e8987", "M68 42H108V74H68Z")
+		path("#4c676a", "M108 42L120 34V66L108 74Z")
+		path("#a0b7a2", "M68 42L80 34H120L108 42Z")
+		path("#202f40", "M74 48H102V66H74Z")
 		rainbowColors.forEach((c, i) => {
-			path(c, `M${76 + i * 3.3} 49v13h2.2V49Z`)
+			path(c, `M${76 + i * 3.5} 50v14h2.5V50Z`)
 		})
-		label("ROYAL RESERVE", 70, 40, 2, "#35434a")
 		hotspot("tank", "Look through the glass tank", 73, 46, 30, 21, discover)
-		path("#b6a681", "M42 59L58 57 59 61 41 63Z M44 62H47V77H44Z M55 61H58V76H55Z")
+		path("#b6a681", "M42 58H58V62H42Z M44 62H46V76H44Z M54 62H56V76H54Z")
 		if (!state.taken.includes("Ledger")) {
 			set("Ledger", 44, 51, .36, "Read the sales ledger", () => {
 				state.truth = true
 				take("Ledger", "Every missing rainbow. Bottled and sold. And every payment signed: Minister Vale.")
 			})
 		}
-		path("#ae865c", "M127 50L129 31 131 31 131 52Z")
+		path("#ae865c", "M128 50L129 32H131V50Z")
 		svg('<circle cx="130" cy="31" r="2.5" fill="#bf7757"/>')
-		path("none", state.cord ? "M129 49L124 24H86L85 32" : "M129 49L126 44M124 24H86L85 32", `stroke="${state.cord ? "#e1dec1" : "#a49173"}" stroke-width=".7"`)
+		path("none", state.cord ? "M130 50L124 26H88V34" : "M130 50L128 44M124 26H88V34", `stroke="${state.cord ? "#e1dec1" : "#a49173"}" stroke-width=".7"`)
 		hotspot("lever", "Pull the release lever", 124, 27, 11, 27, release)
-		label("RELEASE", 123, 59, 2)
-		path("#4c6267", "M145 71V32H143V72Z M155 76V35H153V75Z")
-		for (let y = 37; y < 75; y += 5) {
+		path("#4c6267", "M144 76V32H146V76Z M154 76V32H156V76Z")
+		for (let y = 36; y < 76; y += 6) {
 			rect("#6e8580", 144, y, 10, 1)
 		}
 		hotspot("ladder", "Climb to the rainbow lantern", 140, 30, 17, 47, () => show("Roof"))
@@ -312,16 +298,16 @@ const scenes = {
 	Roof: function() {
 		sky()
 		path("#646c70", "M0 83L31 64 124 66 160 84V100H0Z")
-		path("#969782", "M25 71L85 58 144 72 85 96 16 85Z")
-		path("#b8b396", "M25 67L85 55 144 68 85 89 16 81Z")
-		path("#7e8278", "M60 48L103 48 111 68 56 73Z")
-		path("#d1c5a0", "M58 47L105 46 109 51 57 55Z")
-		path("#465660", "M59 44V19H62V44Z M100 43V19H103V43Z")
-		path("#65777b", "M51 21L80 8 111 21 103 25 59 25Z")
-		path("#bca777", "M65 47L80 37 95 47Z")
+		path("#969782", "M16 82L80 60 144 78V82L80 100 16 86Z")
+		path("#b8b396", "M16 82L80 60 144 78 80 96Z")
+		path("#7e8278", "M60 50H102L106 70H56Z")
+		path("#d1c5a0", "M56 46H106L108 50H54Z")
+		path("#465660", "M58 46V22H61V46Z M101 46V22H104V46Z")
+		path("#65777b", "M50 22L81 10 112 22Z")
+		path("#bca777", "M66 46L80 40 96 46Z")
 		if (state.mounted) {
-			set("Prism", 68, 26, .85, "The prism in its cradle", () => say("Nell", aligned() ? "Light. Rain. Horn. The lantern is ready." : "The prism is back. Now to open the shutters in the right order."))
-			path("#f6dda277", "M0 18L77 30 77 35 0 26Z")
+			path("#f6dda277", "M123 17L80 32 80 36Z")
+			set("Prism", 69, 26, .8, "The prism in its cradle", () => say("Nell", aligned() ? "Light. Rain. Horn. The lantern is ready." : "The prism is back. Now to open the shutters in the right order."))
 		} else {
 			hotspot("cradle", "An empty triangular cradle", 67, 28, 28, 22, () => say("Nell", "A triangular cradle. About the size of a certain royal paperweight."))
 		}
@@ -329,23 +315,21 @@ const scenes = {
 			const x = 65 + i * 15
 			svg(`<circle cx="${x}" cy="60" r="5.5" fill="#354955" stroke="#c5ae80" stroke-width=".7"/>`)
 			set(["Sun", "Drop", "Horn"][state.shutters[i]], x, 60, .48)
-			label(String(i + 1), x, 70, 2, "#313f4c", 'text-anchor="middle"')
 			hotspot("dial" + i, `Shutter ${i + 1}: ${["Light", "Rain", "Horn"][state.shutters[i]]}. Click to turn.`, x - 5.5, 54.5, 11, 11, () => {
 				state.shutters[i] = (state.shutters[i] + 1) % 3
 				show("Roof")
 				info(aligned() ? "Light → Rain → Horn. The shutters line up." : "Turn the shutters. The workshop diagram showed the order.")
 			})
 		}
-		label("1 → 2 → 3", 73, 77, 2.4, "#344451")
 		protagonist(32, 47, .8)
 		exit("down", "Down to the engine", 16, 88, "Engine", -1)
 	},
 	Bridge: function() {
 		sky()
 		rainbow(111, 84, 60, 2)
-		path("#6a806e", "M0 75L35 66 76 84 85 100H0Z M132 70L160 62V100H117Z")
-		path("#929981", "M0 72L35 62 76 80 70 85 33 70 0 80Z")
-		path("#333f4a", "M74 84L89 94 105 86 119 94 125 83 132 100H78Z")
+		path("#6a806e", "M0 74L32 66 108 80 116 100H0Z M140 74L160 64V100H128Z")
+		path("#929981", "M0 72L32 64 108 78 104 84 32 70 0 80Z")
+		path("#333f4a", "M104 84L116 100H86Z")
 		set("Unicorn", 58, 44, .9, "Cross the rainbow with Morrow", finish)
 		protagonist(32, 54)
 		hotspot("cross", "Cross the rainbow with Morrow", 88, 20, 48, 51, finish)
