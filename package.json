@@ -1,0 +1,19 @@
+{
+  "devDependencies": {
+    "esbuild": "0.28.1",
+    "playwright": "1.62.1",
+    "roadroller": "2.1.0"
+  },
+  "name": "the-last-rainbow",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A small SVG adventure about unicorns and rainbows",
+  "scripts": {
+    "build": "make",
+    "serve": "make serve",
+    "test": "make test"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

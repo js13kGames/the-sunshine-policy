@@ -1,0 +1,141 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#232536">
+<title>The Last Rainbow</title>
+<style>
+* { box-sizing: border-box; }
+html { background: #171b2b; color: #fff5de; }
+body { margin: 0; font: 600 16px/1.45 system-ui, sans-serif; overscroll-behavior: none; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, [role=button]:focus-visible { outline: 2px solid #f9d886; outline-offset: 4px; }
+#frame { position: absolute; width: min(100vw, 160vh); width: min(100vw, 160svh); aspect-ratio: 8/5; inset: 0; margin: auto; overflow: hidden; background: #303749; }
+#stage { display: block; width: 100%; height: 100%; touch-action: none; }
+#stage [role=button] { cursor: pointer; outline: none; }
+.hit { fill: transparent; stroke: transparent; stroke-width: .4; }
+#stage [role=button]:focus-visible .hit, .reveal .hit { stroke: #ffedb0; stroke-dasharray: 1 1; fill: #fff2; }
+#hud { position: absolute; left: 3%; right: 3%; top: 3%; display: flex; align-items: start; justify-content: space-between; pointer-events: none; }
+#location { font-size: clamp(10px, 1.2vw, 15px); letter-spacing: .12em; text-transform: uppercase; text-shadow: 0 1px 5px #000; }
+#inventory { display: flex; gap: 5px; pointer-events: auto; }
+#inventory button { width: clamp(30px, 4.7vw, 56px); height: clamp(30px, 4.7vw, 56px); border: 1px solid #fff3; border-radius: 3px; background: #191b2bbc; padding: 4px; }
+#inventory button:hover { background: #454359; border-color: #ffe3a0; }
+#inventory svg { width: 100%; height: 100%; }
+#bubble { position: absolute; z-index: 3; max-width: min(440px, 88%); padding: .8em 1em; background: #fff5de; color: #282737; border-radius: 5px; box-shadow: 0 4px 0 #151a2933; font-size: clamp(12px, 1.65vw, 21px); font-weight: 550; }
+#bubble:after { content: ''; position: absolute; left: var(--tail, 50%); bottom: -10px; border: 6px solid transparent; border-top: 6px solid #fff5de; }
+#speaker { display: block; font-size: .64em; text-transform: uppercase; letter-spacing: .14em; margin-bottom: .4em; color: #806343; font-weight: 800; }
+#next { display: block; margin-top: .5em; text-align: right; font-size: .58em; letter-spacing: .1em; opacity: .65; }
+#choices { display: grid; gap: .2em; }
+#choices button { border: 0; padding: .35em 0; background: none; text-align: left; color: #32324a; }
+#choices button:hover { color: #9a4d42; text-decoration: underline; }
+#footer { position: absolute; bottom: 0; width: 100%; min-height: 7%; padding: .7% 3%; background: #161a2acc; display: flex; align-items: center; gap: 1em; }
+#info { flex: 1; font-size: clamp(10px, 1.3vw, 17px); }
+#footer button { background: none; border: 0; padding: 3px; font-size: clamp(10px, 1.1vw, 14px); opacity: .8; }
+#cover, #menu { position: absolute; inset: 0; z-index: 4; padding: 8% 7%; background: linear-gradient(90deg, #191c2bc9, #191c2b00 85%); }
+.eyebrow { font-size: clamp(9px, 1.2vw, 15px); letter-spacing: .23em; text-transform: uppercase; color: #eac992; }
+h1 { font: 500 clamp(32px, 7.3vw, 100px)/.96 Georgia, serif; letter-spacing: -.045em; margin: 5% 0 3%; }
+#cover p { max-width: 27em; width: 52%; font-size: clamp(10px, 1.5vw, 20px); font-weight: 400; color: #e7ddd1; }
+.primary { display: inline-block; background: #f1d398; color: #282737; border: 0; border-radius: 2px; padding: .65em 1.2em; margin: 1em .5em 0 0; font-size: clamp(11px, 1.5vw, 19px); }
+.secondary { background: #202538dd; border: 1px solid #d6bd8870; color: #f9e8cb; }
+#cover .footnote { position: absolute; bottom: 5%; font-size: clamp(9px, 1.1vw, 14px); letter-spacing: .06em; opacity: .65; }
+#menu { background: #191c2bee; text-align: center; padding: 10% 8%; font-size: clamp(12px, 1.6vw, 20px); overflow: auto; }
+#menu h2 { font: 500 2.4em Georgia, serif; margin: 0 0 .6em; }
+#menu p { max-width: 35em; margin: 1em auto; }
+[hidden] { display: none !important; }
+.drift { animation: drift 7s ease-in-out infinite alternate; }
+.turn { transform-box: fill-box; transform-origin: center; animation: turn 14s linear infinite; }
+.flow { animation: flow 1.8s linear infinite; }
+.rain { animation: rain .7s linear infinite; }
+@keyframes turn { to { transform: rotate(360deg); } }
+@keyframes drift { to { transform: translateY(-1.3px); } }
+@keyframes flow { to { stroke-dashoffset: -12; } }
+@keyframes rain { to { transform: translate(-2px, 6px); } }
+@media (prefers-reduced-motion: reduce) { *, *:after { animation: none !important; } }
+@media (max-aspect-ratio: 4/5) {
+ #frame { width: 100vw; overflow: visible; }
+ #bubble { font-size: 15px; max-width: 94%; }
+ #inventory button { width: 35px; height: 35px; }
+ #footer { min-height: 35px; transform: translateY(100%); }
+ #menu { inset: -20vh 0; padding-top: 20%; }
+}
+</style>
+</head>
+<body>
+<div id="frame">
+<svg id="stage" viewBox="0 0 160 100" aria-label="Adventure scene">
+<defs>
+ <g id="Nell">
+  <path fill="#202b38" d="M5 25L4 37 1 39 1 40 7 40 9 27 11 37 10 40 17 40 17 38 14 36 14 25Z"/>
+  <path fill="#cf794f" d="M5 11L12 10 17 15 14 28 3 28 4 19 1 24 0 23 1 15Z"/>
+  <path fill="#914c43" d="M11 12L12 25 16 27 14 28 7 28 8 15Z"/>
+  <path fill="#efc19a" d="M5 3L12 3 13 8 10 12 6 10Z M15 15L18 23 16 27 14 26 15 23 13 17Z M2 17L3 23 1 27 0 26 0 23Z"/>
+  <path fill="#303044" d="M3 10L3 3 6 0 12 1 14 5 10 4 6 5 5 11Z"/>
+  <path fill="#eabf75" d="M4 11L8 13 12 10 12 13 8 16 4 13Z"/>
+  <path fill="#5a453e" d="M3 23L14 22 14 24 3 25Z M12 15L14 15 8 24 6 24Z"/>
+  <path fill="#dab17f" d="M8 23L14 23 14 29 7 28Z"/>
+ </g>
+ <g id="Iris">
+  <path fill="#262e37" d="M4 28L4 38 0 40 7 40 10 29 12 39 17 40 18 38 15 35 15 27Z"/>
+  <path fill="#58756c" d="M5 10L11 10 16 14 17 32 2 32 3 16Z"/>
+  <path fill="#344e50" d="M11 12L10 32 17 32 14 17Z"/>
+  <path fill="#ca9e7f" d="M5 3L13 4 12 10 8 13 5 9Z M3 14L0 25 4 28 5 26 3 24 6 17Z M14 14L19 24 16 29 14 28 16 24 12 17Z"/>
+  <path fill="#c8c8b1" d="M4 10L2 5 6 0 12 1 15 7 11 5 6 5 6 11Z"/>
+  <path fill="#c3ad7d" d="M5 14L6 30 14 30 12 15 10 17 8 17Z"/>
+  <path stroke="#8d7660" stroke-width="1.2" d="M18 24L20 40"/>
+ </g>
+ <g id="Vale">
+  <path fill="#232435" d="M7 30L7 43 2 45 9 45 12 32 14 43 13 45 21 45 20 43 18 42 18 29Z"/>
+  <path fill="#53506a" d="M7 12L15 12 21 17 18 27 22 36 5 36 6 26 3 20Z"/>
+  <path fill="#333349" d="M14 14L13 34 22 36 18 27 21 17Z"/>
+  <path fill="#f2d6b4" d="M8 4L16 3 17 10 14 14 9 12Z M3 18L0 28 5 31 6 29 3 27 7 20Z M19 18L24 27 29 26 30 28 23 30 16 22Z"/>
+  <path fill="#c4ad7b" d="M7 6L6 3 9 1 16 1 19 4 17 7 15 4 10 4 9 7Z M8 13L12 16 16 12 14 20 11 20Z M6 26L18 26 18 28 6 28Z"/>
+  <path fill="#292638" d="M10 8L11 8 11 9 10 9Z M14 8L15 8 15 9 14 9Z"/>
+  <path stroke="#c6a36b" stroke-width="1" d="M28 26L27 45"/>
+  <circle cx="28" cy="25" r="1.7" fill="#e6c47e"/>
+ </g>
+ <g id="Unicorn">
+  <path fill="#acb9bd" d="M24 24L26 36 24 40 29 40 30 25 43 25 47 36 46 40 51 40 49 34 48 22Z"/>
+  <path fill="#a9b7b7" d="M46 15Q59 11 58 31L54 27 54 34 51 29Q57 15 46 19Z"/>
+  <path fill="#f6efd7" d="M7 10L9 5 13 8 17 8 22 18Q30 14 44 15L49 20 46 28 32 29 23 27 18 22 15 14 11 18 4 18 2 15Z"/>
+  <path fill="#d5d8c7" d="M4 16L11 15 16 11 21 24 31 27 44 25 46 20 49 20 46 28 32 29 23 27 18 22 15 14 11 18 4 18Z"/>
+  <path fill="#f6efd7" d="M24 25L25 32 21 39 26 39 29 32 29 26Z M42 26L40 34 41 39 46 39 44 36 46 27Z"/>
+  <path fill="#677482" d="M21 39L26 39 26 41 20 41Z M41 39L46 39 47 41 41 41Z M24 40L29 40 29 42 24 42Z M46 40L51 40 51 42 46 42Z"/>
+  <path fill="#a6bcbb" d="M13 8L18 7 23 13 25 21 21 25 20 19 17 17 18 14Z"/>
+  <path fill="#f7d88c" d="M7 11L1 0 11 9Z"/>
+  <path stroke="#b68e67" stroke-width=".5" d="M4 4L5 7M6 6L7 10"/>
+  <path fill="#e9e5ce" d="M13 9L12 3 16 7Z"/>
+  <path fill="#333447" d="M8 12L10 11 10 12 8 13Z"/>
+ </g>
+ <g id="Bird">
+  <path fill="#1f293e" d="M1 9L9 3 12 4 13 1 17 0 20 3 18 7 13 12 10 12 0 18 4 10Z"/>
+  <path fill="#dedbcc" d="M8 5L13 7 11 11 5 13Z"/>
+  <path fill="#668e95" d="M5 10L1 15 10 10Z"/>
+  <path fill="#d9ae6d" d="M19 3L24 5 19 5Z"/>
+  <circle cx="17" cy="3" r=".5" fill="#f9dda5"/>
+ </g>
+ <g id="Order"><path fill="#f2dbac" d="M3 1L23 3 21 28 0 26Z"/><path stroke="#aa916f" d="M6 7L19 8M5 11L18 12M5 15L15 16"/><path fill="#bc6651" d="M12 23L11 31 16 28 20 31 19 22Z"/><circle cx="16" cy="22" r="5" fill="#e7bd63"/><path fill="#fff0b7" d="M13 20L14 23 18 20 18 24 13 24Z"/></g>
+ <g id="Biscuit"><path fill="#c58a4e" d="M3 3L14 0 22 7 21 19 11 25 1 20 0 9Z"/><path fill="#eec483" d="M3 3L14 0 22 7 20 16 10 22 1 17 0 9Z"/><path fill="#9c6b48" d="M6 7H8V9H6ZM15 5H17V7H15ZM11 13H13V15H11ZM4 15H6V17H4ZM17 12H19V14H17Z"/></g>
+ <g id="Key"><circle cx="8" cy="8" r="6" fill="none" stroke="#ddb96e" stroke-width="3"/><path fill="#ddb96e" d="M10 12L14 10 24 24 20 27 17 24 19 22 17 20 15 22Z"/></g>
+ <g id="Oil"><path fill="#c88455" d="M4 10L18 10 22 24 0 24Z"/><path fill="#e1ac6b" d="M7 6H15V10H7ZM19 13L27 5 28 6 23 20Z"/><path stroke="#8d5b45" fill="none" stroke-width="2" d="M4 13C-4 10-4 22 2 21"/><path fill="#efce8e" d="M9 13L7 18 11 20 14 18 11 13Z"/></g>
+ <g id="Spanner"><path fill="#a7c2c4" d="M6 0L5 7 10 10 15 6 14 0 19 5 18 11 13 15 6 30 1 28 9 12 4 10 2 4Z"/><path fill="#63858f" d="M8 15L3 28 5 29 11 16Z"/></g>
+ <g id="Hair"><path d="M3 25C28 2 0-5 4 14S30 26 25 3M6 28C30 8 9 0 10 12S27 21 21 0" fill="none" stroke="#e4e4c9" stroke-width="1.5"/><path fill="#bf7f5e" d="M1 23L10 24 10 27 1 26Z"/></g>
+ <g id="Ledger"><path fill="#282e42" d="M1 5L21 0 27 23 7 29Z"/><path fill="#ede0b4" d="M5 8L24 4 27 21 8 26Z"/><path fill="#8c4c4c" d="M1 3L21 0 24 21 5 27Z"/><path fill="#d9b57a" d="M6 8L17 5 18 7 7 10ZM8 12L18 9 19 11 9 14Z"/></g>
+ <g id="Prism"><path fill="#b1d4cc" d="M14 0L29 25 0 25Z"/><path fill="#e6efdb" d="M14 0L12 20 0 25Z"/><path fill="#80b0bf" d="M14 0L29 25 12 20Z"/><path fill="#e5ae9a" d="M0 25L12 20 29 25Z"/></g>
+ <g id="Cloud"><path fill="#ccb8ad" d="M0 8Q2 2 9 4Q13-4 21 2Q29-2 32 6Q42 4 45 11L-4 11Z"/></g>
+ <g id="Wheel"><circle cx="0" cy="0" r="12" fill="#5c4540" stroke="#ad805b" stroke-width="2"/><circle r="8" fill="#2e3940"/><path stroke="#ab805e" stroke-width="2" d="M-11 0H11M0-11V11M-8-8L8 8M-8 8L8-8"/><circle r="2.5" fill="#d5af75"/></g>
+ <g id="Sun"><circle r="3" fill="#f0cb80"/><path stroke="#f0cb80" d="M0-7V-5M0 5V7M-7 0H-5M5 0H7M-5-5L-4-4M4 4L5 5M-5 5L-4 4M4-4L5-5"/></g>
+ <g id="Drop"><path fill="#87bec6" d="M0-7Q-9 4 0 6Q9 4 0-7Z"/></g>
+ <g id="Horn"><path fill="#eadaba" d="M-4 6L1-8 4 6Z"/><path stroke="#b09381" d="M-2 0L2-2M-3 4L3 1"/></g>
+</defs>
+<g id="world"></g>
+</svg>
+<div id="hud"><span id="location"></span><div id="inventory" aria-label="Inventory"></div></div>
+<div id="bubble" hidden><span id="speaker"></span><div id="words"></div><div id="choices"></div><span id="next">CLICK / SPACE TO CONTINUE ▸</span></div>
+<div id="footer"><span id="info">Explore the scene. Click to interact.</span><button id="hotspots" title="Show hotspots (H)">Hotspots</button><button id="help">Help</button></div>
+<div id="cover"><div class="eyebrow">A small adventure in a thirsty kingdom</div><h1>The Last<br>Rainbow</h1><p>Unicorns. Rainbows.<br>A perfectly reasonable royal request.</p><button class="primary" id="start">Begin the adventure →</button><button class="primary secondary" id="resume" hidden>Continue</button><div class="footnote">POINT & CLICK · NO HURRY · NO DRAGGING</div></div>
+<div id="menu" hidden></div>
+</div>
+<script src="src.js"></script>
+</body>
+</html>
