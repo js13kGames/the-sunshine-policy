@@ -43,12 +43,12 @@ h1 { font: 500 clamp(32px, 7.3vw, 100px)/.96 Georgia, serif; letter-spacing: -.0
 #menu h2 { font: 500 2.4em Georgia, serif; margin: 0 0 .6em; }
 #menu p { max-width: 35em; margin: 1em auto; }
 [hidden] { display: none !important; }
-.drift { animation: drift 90s linear infinite alternate; }
+.drift { animation: drift 10s linear infinite alternate; }
 .turn { transform-box: fill-box; transform-origin: center; animation: turn 14s linear infinite; }
 .flow { animation: flow 1.8s linear infinite; }
 .rain { animation: rain .7s linear infinite; }
 @keyframes turn { to { transform: rotate(360deg); } }
-@keyframes drift { to { transform: translateX(3px); } }
+@keyframes drift { to { transform: translateX(12px); } }
 @keyframes flow { to { stroke-dashoffset: -12; } }
 @keyframes rain { to { transform: translate(-2px, 6px); } }
 @media (prefers-reduced-motion: reduce) { *, *:after { animation: none !important; } }
