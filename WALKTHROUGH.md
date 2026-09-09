@@ -13,10 +13,11 @@ would rather solve one step at a time.
    fed, and rather more talkative. His name is Morrow.
 5. Return to the mill and enter the dark doorway. Read the drawing on the
    workshop wall: **Light → Rain → Horn**. Take the oil can and spanner.
-6. Go outside, then right to the spillway. Use the oil can, then the spanner.
-   The sluice opens and the mill starts turning.
-7. Take the right path to the engine beneath the mill. Inspect the rainbow
-   tank and take the sales ledger. The release lever's cord has snapped.
+6. Go outside, then right to the spillway. Use the oil can, then the spanner
+   on the small handwheel. The sluice opens and the mill starts turning.
+7. Follow the footbridge to the arched maintenance entrance on the right.
+   Inspect the rainbow tank and take the sales ledger beneath the mill.
+   The release lever's cord has snapped.
 8. Return to Morrow and talk to him about the stolen rainbow. He gives you
    a hair from his tail to replace the cord.
 9. At the palace, use the sales ledger. Dullworth exchanges his prism for the

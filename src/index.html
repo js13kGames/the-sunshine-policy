@@ -67,13 +67,13 @@ h1 { font: 500 clamp(32px, 7.3vw, 100px)/.96 Georgia, serif; letter-spacing: -.0
 <defs>
  <!-- Shared joints and contours keep clothes, limbs and shading aligned. -->
  <g id="Figure">
-  <path d="M7 2L13 2 14 6 12 9 12 11 16 13 18 19 19 23 18 27 16 29 16 26 17 23 15 20 14 17 14 25 6 25 6 17 5 20 3 23 4 26 4 29 2 27 1 23 2 19 4 13 8 11 8 9 6 7 6 3Z"/>
+  <path d="M7 2H13L14 6 12 9V11L16 13 18 20 18 26 17 29 16 30V27L15 28 16 25V21L14 17V25H6V17L4 21V25L5 28 4 27V30L3 29 2 26V20L4 13 8 11V9L6 7V3Z"/>
  </g>
  <g id="Legs">
-  <path fill="#202b38" d="M6 24L14 24 15 33 14 38 17 40 17 41 12 41 11 33 10 28 9 33 8 40 3 41 1 40 5 38 5 33Z"/>
+  <path fill="#202b38" d="M6 24H14V33L14 38 16 40V41H12L11 33 10 29 9 33 8 41H3V40L5 38V33Z"/>
  </g>
  <g id="Tunic">
-  <path d="M8 11L10 13 12 11 16 13 18 19 15 20 14 17 14 24 15 28 5 28 6 24 6 17 5 20 2 19 4 13Z"/>
+  <path d="M8 11L10 13 12 11 16 13 18 20L16 21 14 17V24L15 28H5L6 24V17L4 21 2 20 4 13Z"/>
  </g>
  <g id="Nell">
   <use href="#Figure" fill="#efc19a"/>
@@ -86,32 +86,32 @@ h1 { font: 500 clamp(32px, 7.3vw, 100px)/.96 Georgia, serif; letter-spacing: -.0
   <path fill="#dab17f" d="M8 25H14V29H8Z"/>
  </g>
  <g id="Iris">
+  <path stroke="#8d7660" stroke-width="1" d="M17 26L18 41"/>
   <use href="#Figure" fill="#ca9e7f"/>
   <use href="#Legs"/>
   <use href="#Tunic" fill="#58756c"/>
   <path fill="#344e50" d="M12 13L14 17 14 24 16 32 4 32 6 24 6 17 8 13 8 28 12 28Z"/>
   <path fill="#c8c8b1" d="M5 9L4 5 6 1 12 0 15 3 14 7 12 3 8 3 6 6 6 10Z"/>
   <path fill="#c3ad7d" d="M8 13L10 15 12 13 12 24 14 30H6L8 24Z"/>
-  <path stroke="#8d7660" stroke-width="1" d="M18 26L19 41"/>
  </g>
  <g id="Dullworth">
+  <path stroke="#c6a36b" stroke-width="1" d="M17 26L18 41"/>
   <use href="#Figure" fill="#f2d6b4"/>
   <use href="#Legs"/>
   <use href="#Tunic" fill="#53506a"/>
+  <path fill="#53506a" d="M2 20L4 21V25L2 26Z M16 21L18 20V26L16 25Z"/>
   <path fill="#53506a" d="M6 24H14L17 33 11 34 10 31 9 34 3 33Z"/>
   <path fill="#333349" d="M12 13L14 17 14 24 17 33 11 34 10 31 11 24Z"/>
   <path fill="#c4ad7b" d="M6 6L5 3 8 0 13 1 15 4 14 7 12 3 8 3 7 6Z M8 11L10 13 12 11 11 18 9 18Z M6 24H14V25H6Z"/>
-  <path stroke="#c6a36b" stroke-width="1" d="M18 26L19 41"/>
-  <circle cx="18" cy="25" r="1.5" fill="#e6c47e"/>
  </g>
  <g id="Unicorn">
   <path fill="#acb9bd" d="M24 24L29 25 28 33 30 40 26 40 24 33Z M42 24L48 24 48 32 51 40 47 40 44 33Z"/>
   <path fill="#a6bcbb" d="M44 18Q57 16 56 26L55 34 52 31 53 25Q54 21 47 24Z"/>
-  <path fill="#f6efd7" d="M3 14L9 9 12 5 15 7 18 7 24 17L32 18 42 17 47 19 49 24 46 30 44 34 45 40 41 40 40 33 42 29 32 31 25 29 25 32 23 34V36L22 40H18L19 36V34L21 32 20 25 17 19 15 13 10 17 4 18 2 16Z"/>
+  <path fill="#f6efd7" d="M3 14L9 9 13 7H18L24 17L32 18 42 17 47 19 49 24 46 30 44 34 45 40 41 40 40 33 42 29 32 31 25 29 25 32 23 34V36L22 40H18L19 36V34L21 32 20 25 17 19 15 13 10 17 4 18 2 16Z"/>
   <path fill="#d5d8c7" d="M2 16L4 18 10 17 15 13 17 19 20 25 21 32 25 29 24 24 20 17 15 11 9 15Z M47 19L49 24 46 30 44 34 40 33 42 29 46 24Z"/>
   <path fill="#677482" d="M18 40H22V42H17Z M26 40H30L31 42H26Z M41 40H45L46 42H41Z M47 40H51L52 42H47Z"/>
   <path fill="#a6bcbb" d="M15 7L18 7 21 12 24 17 24 24 20 25 21 19 18 15 17 11Z"/>
-  <path fill="#f7d88c" d="M8 10L2 0 12 7Z"/>
+  <path fill="#f7d88c" d="M8 10L2 0 13 7Z"/>
   <path fill="#b68e67" d="M2 0L10 8 8 10Z"/>
   <path fill="#f6efd7" d="M13 7L13 2 16 7Z"/>
   <path fill="#333447" d="M8 12L10 11 10 12 8 13Z"/>
@@ -122,6 +122,7 @@ h1 { font: 500 clamp(32px, 7.3vw, 100px)/.96 Georgia, serif; letter-spacing: -.0
   <path fill="#668e95" d="M5 10L1 15 10 10Z"/>
   <path fill="#d9ae6d" d="M19 3L24 5 19 5Z"/>
   <circle cx="17" cy="3" r=".5" fill="#f9dda5"/>
+  <path stroke="#1f293e" stroke-width=".8" fill="none" d="M10 11V14H13M14 9V14H17"/>
  </g>
  <g id="Order"><path fill="#f2dbac" d="M3 1L23 3 21 28 0 26Z"/><path stroke="#aa916f" d="M6 7L19 8M5 11L18 12M5 15L15 16"/><path fill="#bc6651" d="M12 23L11 31 16 28 20 31 19 22Z"/><circle cx="16" cy="22" r="5" fill="#e7bd63"/><path fill="#fff0b7" d="M13 20L14 23 18 20 18 24 13 24Z"/></g>
  <g id="Biscuit"><path fill="#c58a4e" d="M3 3L14 0 22 7 21 19 11 25 1 20 0 9Z"/><path fill="#eec483" d="M3 3L14 0 22 7 20 16 10 22 1 17 0 9Z"/><path fill="#9c6b48" d="M6 7H8V9H6ZM15 5H17V7H15ZM11 13H13V15H11ZM4 15H6V17H4ZM17 12H19V14H17Z"/></g>
@@ -132,6 +133,17 @@ h1 { font: 500 clamp(32px, 7.3vw, 100px)/.96 Georgia, serif; letter-spacing: -.0
  <g id="Ledger"><path fill="#282e42" d="M2 5L22 1 26 25 6 29Z"/><path fill="#ede0b4" d="M6 24L25 20 26 25 6 29Z"/><path fill="#8c4c4c" d="M2 1L22 1 25 20 6 24Z"/><path fill="#d9b57a" d="M6 8L17 5 18 7 7 10ZM8 12L18 9 19 11 9 14Z"/></g>
  <g id="Prism"><path fill="#b1d4cc" d="M14 0L29 25 0 25Z"/><path fill="#e6efdb" d="M14 0L12 20 0 25Z"/><path fill="#80b0bf" d="M14 0L29 25 12 20Z"/><path fill="#e5ae9a" d="M0 25L12 20 29 25Z"/></g>
  <g id="Cloud"><path fill="#ccb8ad" d="M0 10Q2 4 9 5Q12-2 20 2Q28 0 31 6Q38 5 42 10Z"/></g>
+ <g id="Bench">
+  <path fill="#795b49" d="M2 4H5V24H2Z M44 4H47V24H44Z"/>
+  <path fill="#ad805b" d="M10 12H13V32H10Z M54 12H57V32H54Z"/>
+  <path fill="#795b49" d="M0 0L10 8H58V12H10L0 4Z"/>
+  <path fill="#bb9269" d="M0 0H48L58 8H10Z"/>
+ </g>
+ <g id="Crank">
+  <circle r="5" fill="none" stroke="#91a29a" stroke-width="1.5"/>
+  <path stroke="#91a29a" stroke-width="1.2" d="M-5 0H5M0-5V5"/>
+  <path fill="#c09a69" d="M-1.5-1.5H1.5V1.5H-1.5Z"/>
+ </g>
  <g id="Wheel"><circle cx="0" cy="0" r="12" fill="#5c4540" stroke="#ad805b" stroke-width="2"/><circle r="8" fill="#2e3940"/><path stroke="#ab805e" stroke-width="2" d="M-11 0H11M0-11V11M-8-8L8 8M-8 8L8-8"/><circle r="2.5" fill="#d5af75"/></g>
  <g id="Sun"><circle r="3" fill="#f0cb80"/><path stroke="#f0cb80" d="M0-7V-5M0 5V7M-7 0H-5M5 0H7M-5-5L-4-4M4 4L5 5M-5 5L-4 4M4-4L5-5"/></g>
  <g id="Drop"><path fill="#87bec6" d="M0-7Q-9 4 0 6Q9 4 0-7Z"/></g>
