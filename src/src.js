@@ -151,9 +151,9 @@ const scenes = {
 		path("#c6ad84", "M108 68H128L126 82H110Z")
 		path("#ead5a4", "M102 64H122L128 68H108Z")
 		if (!state.prism) {
-			set("Prism", 110, 57, .38, "The minister's glass paperweight", () => say("Vale", "My paperweight. It keeps the weather reports from blowing away. Such gloomy little reports."))
+			set("Prism", 110, 57, .38, "The minister's glass paperweight", () => say("Dullworth", "My paperweight. It keeps the weather reports from blowing away. Such gloomy little reports."))
 		}
-		set("Vale", 86, 40, 1, "Talk to Minister Vale", talkVale)
+		set("Dullworth", 86, 40, 1, "Talk to Minister Dullworth", talkDullworth)
 		protagonist(49, 54)
 		path("#57575c", "M26 74H36V76H26Z M30 76H32V86H30Z")
 		if (!state.taken.includes("Biscuit")) {
@@ -280,7 +280,7 @@ const scenes = {
 		if (!state.taken.includes("Ledger")) {
 			set("Ledger", 44, 51, .36, "Read the sales ledger", () => {
 				state.truth = true
-				take("Ledger", "Every missing rainbow. Bottled and sold. And every payment signed: Minister Vale.")
+				take("Ledger", "Every missing rainbow. Bottled and sold. And every payment signed: Minister Dullworth.")
 			})
 		}
 		path("#ae865c", "M128 50L129 32H131V50Z")
@@ -348,15 +348,15 @@ const scenes = {
 	}
 }
 
-function talkVale() {
+function talkDullworth() {
 	if (state.prism) {
-		say("Vale", "You have your paperweight. Bring me the horn by sunset.", "Nell", "I'll see what I can arrange.")
+		say("Dullworth", "You have your paperweight. Bring me the horn by sunset.", "Nell", "I'll see what I can arrange.")
 	} else if (state.truth) {
-		say("Nell", "The rainbow didn't vanish. You bottled it.", "Vale", "Stored. For the nation's future.", "Nell", "At six gold pieces a bottle?", "Vale", "A very expensive future. Do you have any evidence?")
+		say("Nell", "The rainbow didn't vanish. You bottled it.", "Dullworth", "Stored. For the nation's future.", "Nell", "At six gold pieces a bottle?", "Dullworth", "A very expensive future. Do you have any evidence?")
 	} else {
-		choose("Vale", [
-			["Why do you need a unicorn's horn?", () => say("Vale", "The old books say you need a horn to make a rainbow.", "Nell", "Does the rest of the unicorn have to come off?", "Vale", "You're the weather keeper. Use your initiative.")],
-			["What happened to the old keeper?", () => say("Vale", "Iris? She objected to my sunshine policy. I gave her a permanent holiday.", "Nell", "She still lives at the mill.", "Vale", "A very local holiday.")],
+		choose("Dullworth", [
+			["Why do you need a unicorn's horn?", () => say("Dullworth", "The old books say you need a horn to make a rainbow.", "Nell", "Does the rest of the unicorn have to come off?", "Dullworth", "You're the weather keeper. Use your initiative.")],
+			["What happened to the old keeper?", () => say("Dullworth", "Iris? She objected to my sunshine policy. I gave her a permanent holiday.", "Nell", "She still lives at the mill.", "Dullworth", "A very local holiday.")],
 			["I'll get back to work.", closeDialog]
 		])
 	}
@@ -365,7 +365,7 @@ function talkVale() {
 function talkIris() {
 	choose("Iris", [
 		["The minister wants the unicorn's horn.", () => say("Iris", "Of course he does. When a clock stops, he asks for the hands.", "Nell", "Can a horn really make a rainbow?", "Iris", "On a living unicorn. They carry the rain across the sky. No rainbow, no way home.", "Nell", "There's one down in the meadow.", "Iris", "Then someone has left it a long way from home.")],
-		["Why isn't the mill turning?", () => say("Iris", "Vale closed the sluice. Said people prefer sunshine.", "Nell", "People also prefer food.", "Iris", "My tools are in the workshop. Oil the rust first, then use the spanner on the wheel. The maintenance passage is beside it.")],
+		["Why isn't the mill turning?", () => say("Iris", "Dullworth closed the sluice. Said people prefer sunshine.", "Nell", "People also prefer food.", "Iris", "My tools are in the workshop. Oil the rust first, then use the spanner on the wheel. The maintenance passage is beside it.")],
 		[state.truth ? "He has been selling the rainbows." : "How does the lantern work?", () => state.truth
 			? say("Iris", "So that's what he meant by liquid assets.", "Nell", "Can we put them back?", "Iris", "Water to turn the mill. A prism in the lantern. Light, then rain, then a living horn. And pull the release, hard.")
 			: readDiagram()],
@@ -389,11 +389,11 @@ function talkUnicorn() {
 	} else if (state.truth && !state.hair) {
 		state.hair = true
 		give("Hair")
-		say("Nell", "I found the rainbow. Vale has it in a tank under the mill.", "Unicorn", "Then open it.", "Nell", "There's a release lever. Its cord has snapped.", "Unicorn", "Take a hair from my tail. One held up the northern lights for a winter.", "Nell", "That's a lot of responsibility for a hair.", "Unicorn", "It had help.", () => render())
+		say("Nell", "I found the rainbow. Dullworth has it in a tank under the mill.", "Unicorn", "Then open it.", "Nell", "There's a release lever. Its cord has snapped.", "Unicorn", "Take a hair from my tail. One held up the northern lights for a winter.", "Nell", "That's a lot of responsibility for a hair.", "Unicorn", "It had help.", () => render())
 	} else {
 		choose("Morrow", [
 			["You can talk?", () => say("Unicorn", "So can you. I was being polite about it.", "Nell", "I'm Nell.", "Unicorn", "Morrow. Last keeper of the western rain.")],
-			["Why haven't you gone home?", () => say("Unicorn", "Rainbows are bridges. Vale took the last one, then chained me here.", "Nell", "And blamed you for eating it.", "Unicorn", "I eat grass. Occasionally a biscuit. The sky gives me wind.")],
+			["Why haven't you gone home?", () => say("Unicorn", "Rainbows are bridges. Dullworth took the last one, then chained me here.", "Nell", "And blamed you for eating it.", "Unicorn", "I eat grass. Occasionally a biscuit. The sky gives me wind.")],
 			[state.truth ? "Will you come to the lantern?" : "How can I help?", () => state.truth
 				? say("Unicorn", "Open the rainbow. I will come when I hear the mill.", "Nell", "Promise?", "Unicorn", "You took the iron off. That was enough.")
 				: say("Unicorn", "Find where he put the rainbow. Follow the water. Or where the water ought to be.")],
@@ -446,7 +446,7 @@ function finish() {
 		state.inventory = []
 		state.ended = true
 		show("End")
-		say("Vale", "WHERE IS MY HORN?", "Nell", "Still attached to the unicorn. The old book was very specific.", "Vale", "My sunshine! My terrace! My shoes!", "Nell", "The farms send their regards.", "Vale", "You're dismissed. Permanently!", "Nell", "Good. I have a bridge to cross.", () => {
+		say("Dullworth", "WHERE IS MY HORN?", "Nell", "Still attached to the unicorn. The old book was very specific.", "Dullworth", "My sunshine! My terrace! My shoes!", "Nell", "The farms send their regards.", "Dullworth", "You're dismissed. Permanently!", "Nell", "Good. I have a bridge to cross.", () => {
 			$("menu").innerHTML = '<div class="eyebrow">Unicorns and rainbows</div><h2>The rain came home.</h2><p>So did Morrow.<br>Nell took a very permanent holiday.<br>Iris went back to work.<br>The minister bought an umbrella.</p><p>THE END · Thanks for playing.</p><button class="primary" id="again">Play again</button>'
 			$("menu").hidden = false
 			$("again").onclick = newGame
@@ -483,7 +483,7 @@ function use(id) {
 		render()
 		say("Nell", "One royal order. With a genuine gold seal.", "Bird", "Kraa!", "Nell", "Keep the paperwork. I'll take the key.")
 	} else if (id == "Order") {
-		say("Nell", "BRING ME THE HORN OF THE LAST UNICORN. Signed: Vale. The seal looks like real gold. Of course it does.")
+		say("Nell", "BRING ME THE HORN OF THE LAST UNICORN. Signed: Dullworth. The seal looks like real gold. Of course it does.")
 	} else if (id == "Key" && here == "Meadow") {
 		state.free = true
 		consume(id)
@@ -515,9 +515,9 @@ function use(id) {
 		state.prism = true
 		give("Prism")
 		render()
-		say("Nell", "Your ledger. Every rainbow, every payment. Shall I read it in the market?", "Vale", "Give me that.", "Nell", "Give me the prism.", "Vale", "Fine. A worthless paperweight. It won't work without a horn.", "Nell", "So you've said.")
+		say("Nell", "Your ledger. Every rainbow, every payment. Shall I read it in the market?", "Dullworth", "Give me that.", "Nell", "Give me the prism.", "Dullworth", "Fine. A worthless paperweight. It won't work without a horn.", "Nell", "So you've said.")
 	} else if (id == "Ledger") {
-		say("Nell", "RAINBOW RESERVE. Six gold pieces per bottle. All signed by Vale. He ought to see this.")
+		say("Nell", "RAINBOW RESERVE. Six gold pieces per bottle. All signed by Dullworth. He ought to see this.")
 	} else if (id == "Hair" && here == "Engine") {
 		state.cord = true
 		consume(id)
@@ -553,7 +553,7 @@ function hintText() {
 	} else if (!state.cord) {
 		return "Use the unicorn hair on the engine's broken cord."
 	} else if (!state.prism) {
-		return state.inventory.includes("Ledger") ? "Show Vale his ledger. Trade it for the prism." : "Take the ledger from beneath the mill."
+		return state.inventory.includes("Ledger") ? "Show Dullworth his ledger. Trade it for the prism." : "Take the ledger from beneath the mill."
 	} else if (!state.mounted) {
 		return "Put the prism in the cradle on the roof."
 	} else if (!aligned()) {
@@ -759,7 +759,7 @@ function newGame() {
 	show("Court")
 	stage.setAttribute("tabindex", "-1")
 	stage.focus()
-	say("Vale", "Ah. The new weather keeper.", "Nell", "Junior weather keeper. Mostly gutters.", "Vale", "The last rainbow has vanished. The fields are dry. People are beginning to complain.", "Nell", "About the drought?", "Vale", "About me. Much more serious.", "Vale", "There's a unicorn below the old mill. Bring me its horn. We'll have the rainbow back by sunset.", "Nell", "Does the unicorn know about this?", "Vale", "Take this royal order. It explains everything.", () => {
+	say("Dullworth", "Ah. The new weather keeper.", "Nell", "Junior weather keeper. Mostly gutters.", "Dullworth", "The last rainbow has vanished. The fields are dry. People are beginning to complain.", "Nell", "About the drought?", "Dullworth", "About me. Much more serious.", "Dullworth", "There's a unicorn below the old mill. Bring me its horn. We'll have the rainbow back by sunset.", "Nell", "Does the unicorn know about this?", "Dullworth", "Take this royal order. It explains everything.", () => {
 		state.intro = true
 		give("Order")
 		save()

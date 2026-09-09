@@ -19,7 +19,7 @@ would rather solve one step at a time.
    tank and take the sales ledger. The release lever's cord has snapped.
 8. Return to Morrow and talk to him about the stolen rainbow. He gives you
    a hair from his tail to replace the cord.
-9. At the palace, use the sales ledger. Vale exchanges his prism for the
+9. At the palace, use the sales ledger. Dullworth exchanges his prism for the
    incriminating evidence.
 10. Beneath the mill, use the unicorn hair to repair the lever. Climb the
     ladder on the right. Use the prism in the lantern.
