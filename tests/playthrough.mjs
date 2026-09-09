@@ -25,6 +25,8 @@ let checks = 0
 const errors = []
 async function run(mobile, reverse = false) {
 	const context = await browser.newContext(mobile ? { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true } : { viewport: { width: 1280, height: 800 } })
+	// An old saved game must not enable Continue or restore its inventory.
+	await context.addInitScript(() => localStorage.setItem('last-rainbow-v1', JSON.stringify({ scene: 'End', inventory: ['Prism'], taken: ['Biscuit'], shutters: [0, 1, 2], intro: true, ended: true })))
 	const page = await context.newPage()
 	page.on('pageerror', error => (errors.push(error.message), console.error('BROWSER', error.message)))
 	page.on('console', message => { if (message.type() == 'error' && !message.text().includes('404')) { errors.push(message.text()) } })
@@ -47,6 +49,8 @@ async function run(mobile, reverse = false) {
 		await page.screenshot({ path: `${output}/${mobile ? 'mobile' : reverse ? 'alternate' : 'desktop'}-${name}.png` })
 	}
 	const travel = async (...ids) => { for (const id of ids) { await act(id) } }
+	assert.equal(await page.locator('#resume').count(), 0)
+	const legacySave = await page.evaluate(() => localStorage.getItem('last-rainbow-v1'))
 	await snap('title')
 	await click('#start')
 	// Resizing during a conversation must not replay or discard it.
@@ -115,11 +119,6 @@ async function run(mobile, reverse = false) {
 	await travel('mill', 'palace')
 	await item('Sales ledger'); await clear()
 	assert.equal(await has('Prism'), 1)
-	// Restore the actual saved game, with inventory and solved machinery intact.
-	await page.reload()
-	await click('#resume')
-	await at('The palace terrace')
-	assert.equal(await has('Prism'), 1)
 	await travel('toMill', 'sluice', 'engine')
 	await item('Unicorn hair'); await clear()
 	await act('lever')
@@ -142,10 +141,17 @@ async function run(mobile, reverse = false) {
 	assert.match(await page.locator('#menu').textContent(), /The rain came home/)
 	await snap('end')
 	assert.equal(await page.locator('#inventory button').count(), 0)
+	assert.equal(await page.evaluate(() => localStorage.getItem('last-rainbow-v1')), legacySave)
+	// Reload must offer only a new adventure, including after completion.
 	await page.reload()
-	await click('#resume')
-	assert.match(await page.locator('#menu').textContent(), /The rain came home/)
-	checks += 16
+	assert.equal(await page.locator('#cover').isVisible(), true)
+	assert.equal(await page.locator('#resume').count(), 0)
+	await click('#start'); await clear()
+	await at('The palace terrace')
+	assert.equal(await has('Royal order'), 1)
+	assert.equal(await has('Prism'), 0)
+	assert.equal(await page.locator('#menu').isVisible(), false)
+	checks += 22
 	await context.close()
 }
 try {
@@ -153,7 +159,7 @@ try {
 	await run(false, true)
 	await run(true, true)
 	assert.deepEqual(errors, [])
-	console.log(`PASS: ${checks} checks; complete desktop, alternate-order and touch playthroughs; save/reload; no browser errors.`)
+	console.log(`PASS: ${checks} checks; complete desktop, alternate-order and touch playthroughs; fresh starts after reload; no browser errors.`)
 } finally {
 	await browser.close()
 	server.close()

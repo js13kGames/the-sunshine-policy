@@ -7,45 +7,13 @@ const $ = id => document.getElementById(id),
 	stage = $("stage"),
 	bubble = $("bubble"),
 	itemNames = { Order: "Royal order", Biscuit: "Biscuit", Key: "Brass key", Oil: "Oil can", Spanner: "Spanner", Hair: "Unicorn hair", Ledger: "Sales ledger", Prism: "Prism" },
-	sceneNames = { Court: "The palace terrace", Mill: "The old rain mill", Meadow: "The last unicorn", Workshop: "The keeper's workshop", Sluice: "The dry spillway", Engine: "Beneath the mill", Roof: "The rainbow lantern", Bridge: "The way home", End: "A change in the weather" },
-	flags = ["intro", "free", "fed", "oiled", "water", "truth", "hair", "cord", "prism", "mounted", "bridge", "ended"],
-	storageKey = "last-rainbow-v1"
+	sceneNames = { Court: "The palace terrace", Mill: "The old rain mill", Meadow: "The last unicorn", Workshop: "The keeper's workshop", Sluice: "The dry spillway", Engine: "Beneath the mill", Roof: "The rainbow lantern", Bridge: "The way home", End: "A change in the weather" }
 
 let state = freshState(), actions = {}, anchors = {}, conversation = [], afterDialog,
-	currentSpeaker, touchTarget, choosing = false, touchTime = 0, saved = readSave()
+	currentSpeaker, touchTarget, choosing = false, touchTime = 0
 
 function freshState() {
 	return { scene: "Court", inventory: [], taken: [], shutters: [2, 0, 1] }
-}
-
-function readSave() {
-	try {
-		const data = JSON.parse(localStorage.getItem(storageKey))
-		if (!data || !sceneNames[data.scene] || !Array.isArray(data.inventory) ||
-			!Array.isArray(data.taken) || !Array.isArray(data.shutters) || data.shutters.length != 3 ||
-			!data.shutters.every(n => Number.isInteger(n) && n >= 0 && n < 3)) {
-			return null
-		}
-		const clean = freshState()
-		clean.scene = data.scene
-		clean.inventory = [...new Set(data.inventory.filter(id => itemNames[id]))]
-		clean.taken = [...new Set(data.taken.filter(id => itemNames[id]))]
-		clean.shutters = data.shutters
-		for (const flag of flags) {
-			clean[flag] = data[flag] === true
-		}
-		return clean
-	} catch (e) {
-		return null
-	}
-}
-
-function save() {
-	try {
-		localStorage.setItem(storageKey, JSON.stringify(state))
-	} catch (e) {
-		// Private browsing may deny storage. The adventure still works.
-	}
 }
 
 function svg(markup) {
@@ -600,11 +568,10 @@ function render() {
 }
 
 function show(name) {
-	closeDialog(false)
+	closeDialog()
 	state.scene = name
 	render()
 	info()
-	save()
 }
 
 function say(...lines) {
@@ -676,14 +643,11 @@ function positionBubble() {
 	bubble.style.setProperty("--tail", Math.max(12, Math.min(width - 18, center - x)) + "px")
 }
 
-function closeDialog(persist = true) {
+function closeDialog() {
 	bubble.hidden = true
 	choosing = false
 	conversation = []
 	afterDialog = null
-	if (persist) {
-		save()
-	}
 }
 
 function interact(id) {
@@ -733,7 +697,7 @@ function help() {
 	if (!$("menu").hidden || !$("cover").hidden) {
 		return
 	}
-	$("menu").innerHTML = '<h2>A little help?</h2><p>Click people and objects. Click inventory items to use them here.</p><p>Click / Space: next line. H: hotspots. Tab / Enter: select.<br>Touch: slide to explore, lift to interact.</p><p>Progress saves in this browser when available.</p><button class="primary" id="back">Back to the adventure</button><button class="primary secondary" id="hint">A gentle nudge</button><button class="primary secondary" id="restart">Start over</button>'
+	$("menu").innerHTML = '<h2>A little help?</h2><p>Click people and objects. Click inventory items to use them here.</p><p>Click / Space: next line. H: hotspots. Tab / Enter: select.<br>Touch: slide to explore, lift to interact.</p><button class="primary" id="back">Back to the adventure</button><button class="primary secondary" id="hint">A gentle nudge</button><button class="primary secondary" id="restart">Start over</button>'
 	$("menu").hidden = false
 	$("back").onclick = () => { $("menu").hidden = true }
 	$("hint").onclick = () => {
@@ -746,7 +710,7 @@ function help() {
 		}
 	}
 	$("restart").onclick = () => {
-		$("menu").innerHTML = '<h2>Start a new adventure?</h2><p>This replaces your saved progress.</p><button class="primary" id="yes">Start over</button><button class="primary secondary" id="no">Keep playing</button>'
+		$("menu").innerHTML = '<h2>Start a new adventure?</h2><p>This starts the story from the beginning.</p><button class="primary" id="yes">Start over</button><button class="primary secondary" id="no">Keep playing</button>'
 		$("yes").onclick = newGame
 		$("no").onclick = () => { $("menu").hidden = true }
 	}
@@ -760,9 +724,7 @@ function newGame() {
 	stage.setAttribute("tabindex", "-1")
 	stage.focus()
 	say("Dullworth", "Ah. The new weather keeper.", "Nell", "Junior weather keeper. Mostly gutters.", "Dullworth", "The last rainbow has vanished. The fields are dry. People are beginning to complain.", "Nell", "About the drought?", "Dullworth", "About me. Much more serious.", "Dullworth", "There's a unicorn below the old mill. Bring me its horn. We'll have the rainbow back by sunset.", "Nell", "Does the unicorn know about this?", "Dullworth", "Take this royal order. It explains everything.", () => {
-		state.intro = true
 		give("Order")
-		save()
 		info("Visit Iris at the old mill. The path is on the left.")
 	})
 }
@@ -770,21 +732,6 @@ function newGame() {
 $("hotspots").onclick = toggleHotspots
 $("help").onclick = help
 $("start").onclick = newGame
-$("resume").hidden = !saved
-$("resume").onclick = () => {
-	state = saved
-	$("cover").hidden = true
-	if (!state.intro) {
-		newGame()
-	} else if (state.ended) {
-		show("End")
-		$("menu").innerHTML = '<h2>The rain came home.</h2><p>And the minister bought an umbrella.<br>Thanks for playing.</p><button class="primary" id="again">Play again</button>'
-		$("menu").hidden = false
-		$("again").onclick = newGame
-	} else {
-		show(state.scene)
-	}
-}
 window.addEventListener("keydown", event => {
 	if (!$("cover").hidden) {
 		return

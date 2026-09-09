@@ -29,9 +29,8 @@ Alternatively, run `make serve` and visit
 - H reveals hotspots. Tab and Enter also work.
 - Help offers a contextual hint and a restart option.
 
-Progress is stored locally when the browser allows it. The title screen
-then offers **Continue**. There are no timed puzzles, deaths, or consumable
-mistakes. Landscape gives a larger view on a phone; portrait is supported.
+Reloading starts a new game. There are no timed puzzles, deaths, or
+consumable mistakes. Landscape gives a larger view on a phone; portrait is supported.
 
 ## Build
 
@@ -72,14 +71,14 @@ server and uses temporary browser profiles.
 
 Tests play the entire release build through the visible interface in normal
 and alternate puzzle order, then repeat on a touch phone viewport. They
-check wrong item uses, a deliberately misaligned lantern, save/reload,
+check wrong item uses, a deliberately misaligned lantern, fresh starts after reload,
 completion, and browser errors. Screenshots go to `tests/output/`.
 Set `GAME_SOURCE=1` to test the readable source instead.
 
 ## Files
 
 - `src/index.html` — layout, styles, and hand-drawn SVG sprites.
-- `src/src.js` — scenery, story, puzzles, controls, and save handling.
+- `src/src.js` — scenery, story, puzzles, and controls.
 - `bin/` — deterministic build, packer settings, and ZIP size check.
 - `tests/playthrough.mjs` — browser playthroughs.
 - `WALKTHROUGH.md` — the complete solution, with spoilers.
