@@ -1,0 +1,137 @@
+{
+  "assets": [
+    {
+      "id": "Nell",
+      "category": "Figures"
+    },
+    {
+      "id": "Iris",
+      "category": "Figures"
+    },
+    {
+      "id": "Dullworth",
+      "category": "Figures"
+    },
+    {
+      "id": "Unicorn",
+      "category": "Figures"
+    },
+    {
+      "id": "Bird",
+      "category": "Figures"
+    },
+    {
+      "id": "Order",
+      "category": "Objects"
+    },
+    {
+      "id": "Biscuit",
+      "category": "Objects"
+    },
+    {
+      "id": "Key",
+      "category": "Objects"
+    },
+    {
+      "id": "Oil",
+      "category": "Objects"
+    },
+    {
+      "id": "Spanner",
+      "category": "Objects"
+    },
+    {
+      "id": "Hair",
+      "category": "Objects"
+    },
+    {
+      "id": "Ledger",
+      "category": "Objects"
+    },
+    {
+      "id": "Prism",
+      "category": "Objects"
+    },
+    {
+      "id": "Bench",
+      "category": "Objects"
+    },
+    {
+      "id": "Crank",
+      "category": "Objects"
+    },
+    {
+      "id": "Wheel",
+      "category": "Objects"
+    },
+    {
+      "id": "Sun",
+      "category": "Objects"
+    },
+    {
+      "id": "Drop",
+      "category": "Objects"
+    },
+    {
+      "id": "Horn",
+      "category": "Objects"
+    },
+    {
+      "id": "Cloud",
+      "category": "Objects"
+    },
+    {
+      "id": "ExitArrow",
+      "category": "Objects"
+    },
+    {
+      "id": "Chain",
+      "category": "Objects"
+    },
+    {
+      "id": "Rain",
+      "category": "Objects"
+    },
+    {
+      "id": "CourtScene",
+      "category": "Scenes"
+    },
+    {
+      "id": "MillScene",
+      "category": "Scenes"
+    },
+    {
+      "id": "MeadowScene",
+      "category": "Scenes"
+    },
+    {
+      "id": "WorkshopScene",
+      "category": "Scenes"
+    },
+    {
+      "id": "SluiceScene",
+      "category": "Scenes"
+    },
+    {
+      "id": "EngineScene",
+      "category": "Scenes"
+    },
+    {
+      "id": "RoofScene",
+      "category": "Scenes"
+    },
+    {
+      "id": "BridgeScene",
+      "category": "Scenes"
+    }
+  ],
+  "required_ids": [
+    "MillWater",
+    "MillCurrent",
+    "GatePanel",
+    "SluiceWater",
+    "ReleaseCord",
+    "BrokenReleaseCord",
+    "Sunbeam"
+  ]
+}

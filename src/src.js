@@ -2,7 +2,6 @@
 
 const $ = id => document.getElementById(id),
 	NS = "http://www.w3.org/2000/svg",
-	rainbowColors = ["#d77b76", "#dfaa70", "#edd49a", "#92b597", "#83b3c5", "#8995bb", "#a58fad"],
 	world = $("world"),
 	stage = $("stage"),
 	bubble = $("bubble"),
@@ -14,18 +13,6 @@ let state = freshState(), actions = {}, anchors = {}, conversation = [], afterDi
 
 function freshState() {
 	return { scene: "Court", inventory: [], taken: [], shutters: [2, 0, 1] }
-}
-
-function svg(markup) {
-	world.insertAdjacentHTML("beforeend", markup)
-}
-
-function path(fill, d, extra = "") {
-	svg(`<path fill="${fill}" d="${d}" ${extra}/>`)
-}
-
-function rect(fill, x, y, w, h, extra = "") {
-	svg(`<rect fill="${fill}" x="${x}" y="${y}" width="${w}" height="${h}" ${extra}/>`)
 }
 
 function set(id, x, y, size = 1, name, action) {
@@ -75,7 +62,7 @@ function hotspot(id, name, x, y, w, h, action) {
 }
 
 function exit(id, name, x, y, to, direction = 1) {
-	path("#f0ddb0", `M${x} ${y}l${-direction * 2} -1.5v1h${-direction * 4}v1h${direction * 4}v1Z`)
+	set("ExitArrow", x, y).firstElementChild.setAttribute("transform", `scale(${direction} 1)`)
 	hotspot(id, name, x - 8, y - 4, 16, 8, () => show(to))
 }
 
@@ -83,89 +70,37 @@ function protagonist(x = 46, y = 55, s = .8) {
 	set("Nell", x, y, s, "Nell, junior weather keeper", () => say("Nell", hintText()))
 }
 
-function sky(night = false) {
-	rect(night ? "#30384f" : "#8b9b9a", 0, 0, 160, 100)
-	svg(`<circle cx="123" cy="17" r="6" fill="#f0c58c"/>`)
-	set("Cloud", 8, 11, .9).firstElementChild.classList.add("drift")
-	set("Cloud", 100, 18, 1.2).firstElementChild.classList.add("drift")
-	path("#707e86", "M0 50L20 38 34 42 60 26 90 48 118 34 160 52V100H0Z")
-	path("#565e6d", "M0 62L28 48 52 56 88 40 122 58 148 48 160 52V100H0Z")
-}
-
-function grass(x, y, color = "#ac986e") {
-	path(color, `M${x} ${y}l-2 -6 3 4 2 -8v8l4 -3 -3 6Z`)
-}
-
-function rainbow(x, y, radius, width = 1.4) {
-	rainbowColors.forEach((color, i) => {
-		const r = radius - i * width
-		path("none", `M${x - r} ${y}a${r} ${r} 0 0 1 ${r * 2} 0`, `stroke="${color}" stroke-width="${width + .08}"`)
-	})
-}
-
 const scenes = {
 	Court: function() {
-		sky()
-		path("#b6aa8c", "M0 60H160V100H0Z")
-		path("#9a8d77", "M0 72L80 64 160 72V100H0Z")
-		path("#d3c3a2", "M0 0H20V56H24V62H0Z M140 0H160V62H136V56H140Z")
-		path("#b5a385", "M0 0H6V56H20V58H0Z M152 0H160V62H152Z")
-		path("#d3c3a2", "M20 50H140V53H20Z")
-		for (let x = 28; x < 140; x += 16) {
-			rect("#c5b595", x, 53, 3, 10)
-		}
-		path("#d3c3a2", "M0 62H160V65H0Z")
-		path("#81705f", "M106 60L112 64V82L106 78Z")
-		path("#c6ad84", "M112 64H132V82H112Z")
-		path("#ead5a4", "M106 60H126L132 64H112Z")
+		set("CourtScene", 0, 0)
 		if (!state.prism) {
 			set("Prism", 113, 54, .38, "The minister's glass paperweight", () => say("Dullworth", "My paperweight. It keeps the weather reports from blowing away. Such gloomy little reports."))
 		}
 		set("Dullworth", 84, 43, .95, "Talk to Minister Dullworth", talkDullworth)
 		protagonist(49, 54)
-		svg('<ellipse cx="31" cy="76" rx="6" ry="1.5" fill="#57575c"/>')
-		path("#57575c", "M30 76H32V84L37 86H33L31 85 29 86H25L30 84Z")
 		if (!state.taken.includes("Biscuit")) {
 			set("Biscuit", 28, 73, .3, "Take the neglected biscuit", () => take("Biscuit", "A royal biscuit. Hard enough to inherit the throne.")).firstElementChild.setAttribute("transform", "scale(1 .4)")
 		}
 		exit("toMill", "Down to the rain mill", 10, 87, "Mill", -1)
 	},
 	Mill: function() {
-		sky()
-		path("#999379", "M0 66L60 53 114 59 160 52V100H0Z")
-		path("#b3a07d", "M32 100L64 72H80L68 100Z M0 50L34 58 38 62 0 55Z")
 		// The race arrives from the sluice on the right and passes under the wheel.
-		path("#495e64", "M160 57L132 66 96 70 80 100H114L126 78 160 68Z")
-		path(state.water ? "#82afb3" : "#7a8076", "M160 60L134 69 100 73 86 100H108L121 76 160 65Z")
-		path("#8d826e", "M40 28L50 34V72L40 66Z")
-		path("#b5a78a", "M50 34L88 12 126 34V72H50Z")
-		path("#3b4855", "M38 30L76 8 88 12 50 36Z")
-		path("#53626a", "M48 36L88 12 128 36 125 38 88 17 51 38Z")
-		path("#37434a", "M64 72V52Q72 42 80 52V72Z")
-		rect("#424e53", 88, 34, 7, 10)
-		path("#c4b38c", "M90 34H92V44H90Z")
+		$("MillWater").style.color = state.water ? "#82afb3" : "#7a8076"
+		$("MillCurrent").style.visibility = state.water ? "visible" : "hidden"
+		set("MillScene", 0, 0)
 		const wheel = set("Wheel", 108, 60, 1.2)
 		if (state.water) {
 			wheel.firstElementChild.classList.add("turn")
-			path("none", "M160 62L134 71 109 76 96 100", 'stroke="#b5d5cb" stroke-width="1" stroke-dasharray="3 3" class="flow"')
 		}
 		set("Iris", 27, 48, .9, "Talk to Iris, the old keeper", talkIris)
 		protagonist(51, 58)
-		grass(13, 90)
-		grass(143, 94)
 		hotspot("workshop", "Enter the keeper's workshop", 64, 46, 16, 26, () => show("Workshop"))
 		exit("palace", "Back to the palace", 12, 52, "Court", -1)
 		exit("meadow", "Follow the hoofprints", 12, 89, "Meadow", -1)
 		exit("sluice", "Along the spillway", 148, 78, "Sluice")
 	},
 	Meadow: function() {
-		sky(true)
-		path("#8d8d74", "M0 72Q44 54 88 64L160 56V100H0Z")
-		path("#70765f", "M0 88Q44 72 88 80L160 72V100H0Z")
-		path("#b1a184", "M0 88L45 76 42 82 10 100H0Z")
-		path("#3f4148", "M136 84L139 68V44L126 30 110 28 108 26H127L121 16 123 14 133 28 142 36 145 24 143 12 145 10 149 24 147 38 156 32H160V35L149 44 146 68 153 84 143 80Z")
-		path("#595450", "M142 36L147 38 149 44 146 68 153 84 143 80V68L145 44Z")
-		path("#987851", "M141 37Q149 35 157 37L154 41H144Z")
+		set("MeadowScene", 0, 0)
 		if (!state.taken.includes("Key")) {
 			set("Key", 149, 35, .22)
 		}
@@ -173,31 +108,15 @@ const scenes = {
 		set("Unicorn", 74, 45, 1, "Talk to the unicorn", talkUnicorn)
 		if (!state.free) {
 			// Individual links keep the iron chain visible against the grass.
-			for (let i = 0; i < 11; ++i) {
-				const x = 99 + i * 4, y = 80 + Math.sin(i / 10 * Math.PI) * 10 - i * .2,
-					angle = Math.atan((Math.cos(i / 10 * Math.PI) * Math.PI - .2) / 4) * 180 / Math.PI
-				svg(`<ellipse cx="${x}" cy="${y}" rx="2.4" ry=".9" transform="rotate(${angle} ${x} ${y})" fill="none" stroke="#35434d" stroke-width=".8"/>`)
-			}
-			path("#485762", "M93 79H97V81H93Z")
+			set("Chain", 0, 0)
 			hotspot("shackle", "The iron shackle", 92, 77, 10, 9, () => say("Nell", "Locked. The keyhole is brass. So is that thing in the magpie's nest."))
 		}
 		protagonist(43, 57)
-		grass(67, 88)
-		grass(150, 86)
 		exit("mill", "Back to the mill", 10, 84, "Mill", -1)
 	},
 	Workshop: function() {
-		rect("#414d53", 0, 0, 160, 100)
-		path("#68756e", "M16 0H22V70H16Z M138 0H144V70H138Z M0 12H160V18H0Z")
-		path("#354148", "M0 70H160V100H0Z")
-		path("#afbaa2", "M28 26H54V50H28Z")
-		path("#87988c", "M28 46L40 34 54 46V50H28Z")
-		path("#46565a", "M40 26H42V50H40Z M28 36H54V38H28Z")
+		set("WorkshopScene", 0, 0)
 		set("Bench", 88, 58)
-		path("#a49e83", "M92 26H132V46H92Z")
-		set("Sun", 100, 35, .65)
-		set("Drop", 111, 35, .65)
-		set("Horn", 123, 35, .65)
 		hotspot("diagram", "Read the rainbow diagram", 91, 22, 40, 29, readDiagram)
 		if (!state.taken.includes("Oil")) {
 			set("Oil", 92, 53, .45, "Take the oil can", () => take("Oil", "It says: FOR STUBBORN MACHINERY. Pity it doesn't work on ministers."))
@@ -205,56 +124,28 @@ const scenes = {
 		if (!state.taken.includes("Spanner")) {
 			set("Spanner", 126, 55, .38, "Take the spanner", () => take("Spanner", "A spanner. Finally, a tool I was actually trained to use.")).firstElementChild.setAttribute("transform", "translate(0 8) scale(1 .5) rotate(60 10 15)")
 		}
-		path("#56625c", "M18 62H36L34 76H20Z")
-		path("#232f38", "M18 62Q27 58 36 62Q27 66 18 62Z")
 		protagonist(60, 53, .9)
 		exit("outside", "Outside to Iris", 10, 87, "Mill", -1)
 	},
 	Sluice: function() {
-		sky()
 		// A frontal gate separates two dry banks; its channel leads toward the mill.
-		rect("#81887b", 0, 30, 160, 42)
-		rect("#b6ad8e", 0, 26, 160, 6)
-		path("#2d404e", "M64 70H100L120 100H44Z")
-		path("#a4a082", "M0 68H64L44 100H0Z M100 68H160V100H120Z")
-		path("#777d70", "M64 68L68 72 50 100H44Z M96 72L100 68 120 100H114Z")
-		rect("#273c46", 68, 46, 28, 26)
-		path("#4b5d64", "M64 24H100V28H64Z M66 28H69V72H66Z M95 28H98V72H95Z")
-		const gateTop = state.water ? 26 : 46
-		rect("#697975", 69, gateTop, 26, 26)
-		for (let x = 74; x < 95; x += 7) {
-			rect("#34434b", x, gateTop, 1, 26)
-		}
-		path("#a4a082", "M69 28H95V34H69Z")
-		path("none", "M51 74V54H66", 'stroke="#485b5d" stroke-width="2"')
+		$("GatePanel").setAttribute("transform", `translate(0 ${state.water ? 26 : 46})`)
+		$("SluiceWater").style.visibility = state.water ? "visible" : "hidden"
+		set("SluiceScene", 0, 0)
 		set("Crank", 51, 54, 1, "The sluice handwheel", turnSluice)
 		if (state.water) {
-			path("#80b1b7", "M70 70H94L110 100H54Z")
-			path("none", "M74 74L62 100M82 74V100M90 74L102 100", 'stroke="#c9ddc7" stroke-dasharray="4 2" stroke-width="1" class="flow"')
 			set("Spanner", 46.5, 52.2, .45, "The spanner holding the sluice open", turnSluice)
 		}
 		// The footbridge keeps the maintenance entrance reachable after the gate opens.
-		path("#777d70", "M50 84H112V86H50Z")
-		path("#b6ad8e", "M54 80H108L112 84H50Z")
-		path("#3d4a4e", "M124 72V50Q134 36 144 50V72Z")
-		path("#b6ad8e", "M120 72H148V75H120Z")
 		hotspot("passage", "Enter the maintenance passage", 124, 44, 20, 28, () => show("Engine"))
 		protagonist(25, 48, .8)
 		exit("mill", "Back to the mill", 10, 87, "Mill", -1)
 		exit("engine", "The maintenance passage", 135, 70, "Engine")
 	},
 	Engine: function() {
-		rect("#293846", 0, 0, 160, 100)
-		path("#354752", "M10 0H16V76H10Z M146 0H152V76H146Z M0 18H160V24H0Z")
-		path("#354148", "M0 64H160V100H0Z")
-		path("#876d58", "M56 18H62V56H68V62H56Z M126 66H134V86H126Z")
-		path("#6e8987", "M68 42H108V74H68Z")
-		path("#4c676a", "M108 42L120 34V66L108 74Z")
-		path("#a0b7a2", "M68 42L80 34H120L108 42Z")
-		path("#202f40", "M74 48H102V66H74Z")
-		rainbowColors.forEach((c, i) => {
-			path(c, `M${76 + i * 3.5} 50v14h2.5V50Z`)
-		})
+		$("ReleaseCord").style.visibility = state.cord ? "visible" : "hidden"
+		$("BrokenReleaseCord").style.visibility = state.cord ? "hidden" : "visible"
+		set("EngineScene", 0, 0)
 		hotspot("tank", "Look through the glass tank", 73, 46, 30, 21, discover)
 		set("Bench", 40, 62, .35)
 		if (!state.taken.includes("Ledger")) {
@@ -263,38 +154,21 @@ const scenes = {
 				take("Ledger", "Every missing rainbow. Bottled and sold. And every payment signed: Minister Dullworth.")
 			})
 		}
-		path("#ae865c", "M128 68L135 50H137L132 68Z")
-		svg('<circle cx="136" cy="49" r="2.5" fill="#bf7757"/>')
-		path("none", state.cord ? "M120 50L136 49" : "M120 50L125 54M136 49L131 53", `stroke="${state.cord ? "#e1dec1" : "#a49173"}" stroke-width=".7"`)
 		hotspot("lever", "Pull the release lever", 124, 45, 16, 26, release)
-		rect("#1b2935", 140, 0, 18, 12)
-		path("#4c6267", "M144 86V8H146V86Z M154 86V8H156V86Z")
-		for (let y = 14; y < 86; y += 8) {
-			rect("#6e8580", 144, y, 10, 1)
-		}
 		hotspot("ladder", "Climb to the rainbow lantern", 140, 8, 17, 78, () => show("Roof"))
 		protagonist(25, 55, .83)
 		exit("spillway", "Back to the spillway", 10, 86, "Sluice", -1)
 	},
 	Roof: function() {
-		sky()
-		path("#646c70", "M0 72L36 56H124L160 72V100H0Z")
-		path("#969782", "M18 90H142V94H18Z")
-		path("#b8b396", "M18 70L36 62H124L142 70V90H18Z")
-		path("#7e8278", "M60 48H108V74H60Z")
-		path("#d1c5a0", "M57 44H111V48H57Z")
-		path("#465660", "M60 44V22H63V44Z M105 44V22H108V44Z")
-		path("#65777b", "M54 22L84 10 114 22Z")
-		path("#bca777", "M70 44L84 38 98 44Z")
+		$("Sunbeam").style.visibility = state.mounted ? "visible" : "hidden"
+		set("RoofScene", 0, 0)
 		if (state.mounted) {
-			path("#f6dda277", "M123 17L84 30 84 34Z")
 			set("Prism", 72, 24, .8, "The prism in its cradle", () => say("Nell", aligned() ? "Light. Rain. Horn. The lantern is ready." : "The prism is back. Now to open the shutters in the right order."))
 		} else {
 			hotspot("cradle", "An empty triangular cradle", 70, 26, 28, 22, () => say("Nell", "A triangular cradle. About the size of a certain royal paperweight."))
 		}
 		for (let i = 0; i < 3; ++i) {
 			const x = 69 + i * 15
-			svg(`<circle cx="${x}" cy="60" r="5.5" fill="#354955" stroke="#c5ae80" stroke-width=".7"/>`)
 			set(["Sun", "Drop", "Horn"][state.shutters[i]], x, 60, .48)
 			hotspot("dial" + i, `Shutter ${i + 1}: ${["Light", "Rain", "Horn"][state.shutters[i]]}. Click to turn.`, x - 5.5, 54.5, 11, 11, () => {
 				state.shutters[i] = (state.shutters[i] + 1) % 3
@@ -302,17 +176,11 @@ const scenes = {
 				info(aligned() ? "Light → Rain → Horn. The shutters line up." : "Turn the shutters. The workshop diagram showed the order.")
 			})
 		}
-		path("#293846", "M28 84L34 78H48L42 84Z")
-		path("#6e8580", "M30 84L35 79H36L31 84Z M40 84L45 79H46L41 84Z M32 82H42L41 83H31Z M34 80H44L43 81H33Z")
 		protagonist(43, 51, .8)
 		exit("down", "Down to the engine", 38, 81, "Engine", -1)
 	},
 	Bridge: function() {
-		sky()
-		path("#333f4a", "M0 78H88L82 100H0Z M134 78L160 70V100H128Z")
-		path("#6a806e", "M0 68L32 62 88 78 82 84 0 92Z M134 78L154 68 160 70V88L128 94Z")
-		path("#929981", "M0 68L32 62 88 78 82 81 32 67 0 76Z")
-		rainbow(110, 78, 38, 1.5)
+		set("BridgeScene", 0, 0)
 		set("Unicorn", 26, 40, .9, "Cross the rainbow with Morrow", finish).firstElementChild.setAttribute("transform", "translate(56 0) scale(-1 1)")
 		protagonist(6, 56)
 		hotspot("cross", "Cross the rainbow with Morrow", 72, 30, 76, 49, finish)
@@ -324,10 +192,7 @@ const scenes = {
 			e.removeAttribute("tabindex")
 			delete e.dataset.action
 		})
-		for (let i = 0; i < 60; ++i) {
-			const x = (i * 37) % 164, y = (i * 19) % 92
-			path("none", `M${x} ${y}l-1 3`, 'stroke="#c9d9d399" stroke-width=".35" class="rain"')
-		}
+		set("Rain", 0, 0)
 	}
 }
 

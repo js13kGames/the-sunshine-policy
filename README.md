@@ -1,7 +1,6 @@
 # The Last Rainbow
 
 <img src="svg/screenshot-400x250.jpg" alt="The Last Rainbow"/>
-
 A short point-and-click adventure about unicorns, rainbows, and a perfectly
 reasonable royal request.
 
@@ -41,7 +40,8 @@ npm ci
 make
 ```
 
-`make` builds `htdocs/index.html` and `archive.zip`. The archive contains
+`make` imports the object masters from `svg/atlas.svg`, then builds
+`htdocs/index.html` and `archive.zip`. The archive contains
 only `index.html`; the build fails above **13,312 bytes**. The delivered
 archive is within that limit.
 
@@ -57,6 +57,17 @@ produces identical output. ZIP entry timestamps are fixed, too.
 
 For source development, open `src/index.html` or visit
 [localhost:8080/src/](http://localhost:8080/src/) after `make serve`.
+
+## Edit artwork
+
+The editable artwork lives in **[svg/atlas.svg](svg/atlas.svg)**. It contains complete scene backgrounds, whole characters, and independent
+objects. Each graphic has one master; repeated objects use references.
+Edit inside an object's group, preserve its ID, then run `make`. Changes
+appear everywhere that object is used. `make atlas` updates only the readable
+source preview. Neither command overwrites your atlas.
+
+Sheet positions and labels are separate from game positions. See
+[svg/README.md](svg/README.md) for editing details and scene states.
 
 ## Verification
 
@@ -74,15 +85,17 @@ and alternate puzzle order, then repeat on a touch phone viewport. They
 check wrong item uses, a deliberately misaligned lantern, fresh starts after reload,
 completion, and browser errors. Screenshots go to `tests/output/`.
 Set `GAME_SOURCE=1` to test the readable source instead.
+Atlas tests also check edit/import round trips, shared references, layout
+independence, SVG resources, and missing or duplicate IDs.
 
 ## Files
 
-- `src/index.html` — layout, styles, and hand-drawn SVG sprites.
-- `src/src.js` — scenery, story, puzzles, and controls.
+- `svg/atlas.svg` — authoritative, editable object masters.
+- `svg/atlas.json` — object IDs and atlas categories.
+- `src/index.html` — layout, styles, and generated inline SVG definitions.
+- `src/src.js` — scene composition, story, puzzles, and controls.
+- `bin/atlas.py` — imports SVG masters into the game.
 - `bin/` — deterministic build, packer settings, and ZIP size check.
 - `tests/playthrough.mjs` — browser playthroughs.
+- `tests/atlas.py` — atlas import tests.
 - `WALKTHROUGH.md` — the complete solution, with spoilers.
-
-The `svg/` directory contains a reference scene atlas and preview images,
-matching the layout of *Musa’s Quest*. The editable game sources remain in
-`src/`; the atlas is a generated reference, not a build input.
