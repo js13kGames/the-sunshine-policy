@@ -23,6 +23,36 @@ const browser = await chromium.launch({ headless: true, ...(existsSync(chrome) ?
 const base = `http://127.0.0.1:${server.address().port}/${process.env.GAME_SOURCE ? 'src' : 'htdocs'}/`
 let checks = 0
 const errors = []
+async function verifyCloudMotion(page) {
+	const samples = await page.evaluate(() => {
+		const probe = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+		probe.setAttribute('viewBox', '0 0 160 100')
+		probe.style.cssText = 'position:fixed;width:160px;height:100px;opacity:0;pointer-events:none'
+		const scene = document.getElementById('CourtScene').cloneNode(true)
+		scene.removeAttribute('id')
+		probe.append(scene)
+		document.body.append(probe)
+		try {
+			const clouds = [...probe.querySelectorAll('.drift')]
+			return [0, 5000, 10000, 15000, 20000].map(time => clouds.map(cloud => {
+				cloud.getAnimations().forEach(animation => { animation.pause(); animation.currentTime = time })
+				const { a, b, c, d, e, f } = cloud.getCTM()
+				return { a, b, c, d, e, f }
+			}))
+		} finally { probe.remove() }
+	})
+	for (const [step, clouds] of samples.entries()) {
+		assert.equal(clouds.length, 2)
+		for (const [i, matrix] of clouds.entries()) {
+			const scale = [.9, 1.2][i], phase = [0, .5, 1, .5, 0][step]
+			const expected = { a: scale, b: 0, c: 0, d: scale, e: [8, 100][i] + 12 * scale * phase, f: [11, 18][i] }
+			for (const key of Object.keys(expected)) {
+				assert.ok(Math.abs(matrix[key] - expected[key]) < .001, `Cloud ${i}, step ${step}: ${key}=${matrix[key]}, expected ${expected[key]}`)
+			}
+			++checks
+		}
+	}
+}
 async function run(mobile, reverse = false) {
 	const context = await browser.newContext(mobile ? { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true } : { viewport: { width: 1280, height: 800 } })
 	// An old saved game must not enable Continue or restore its inventory.
@@ -31,6 +61,7 @@ async function run(mobile, reverse = false) {
 	page.on('pageerror', error => (errors.push(error.message), console.error('BROWSER', error.message)))
 	page.on('console', message => { if (message.type() == 'error' && !message.text().includes('404')) { errors.push(message.text()) } })
 	await page.goto(base)
+	if (!mobile && !reverse) { await verifyCloudMotion(page) }
 	const click = async selector => mobile ? page.locator(selector).tap() : page.locator(selector).click()
 	const item = async name => click(`#inventory button[aria-label="Use ${name}"]`)
 	const has = async name => page.locator(`#inventory button[aria-label="Use ${name}"]`).count()

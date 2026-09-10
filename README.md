@@ -47,13 +47,16 @@ archive is within that limit.
 
 The game itself uses plain JavaScript, DOM events, CSS, and an inline SVG
 atlas. There are no runtime dependencies, web fonts, bitmap assets, or
-external requests. esbuild minifies the source; Roadroller packs the HTML.
+external requests. SVGO compacts SVG path syntax in the release build;
+esbuild minifies the source and Roadroller packs the HTML. The editable
+atlas is never modified by these optimizers.
 The decoder is generated into the release file and is public domain.
 Its temporary decoding memory is capped at 64 MB. Source previews do not
 run the decoder.
 
 `bin/packing.json` fixes the compression parameters so identical source
-produces identical output. ZIP entry timestamps are fixed, too.
+produces identical output. Zopfli compresses the ZIP without changing its contents; entry timestamps
+are fixed, too.
 
 For source development, open `src/index.html` or visit
 [localhost:8080/src/](http://localhost:8080/src/) after `make serve`.

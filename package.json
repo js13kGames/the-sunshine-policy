@@ -1,8 +1,10 @@
 {
   "devDependencies": {
+    "@gfx/zopfli": "1.0.15",
     "esbuild": "0.28.1",
     "playwright": "1.62.1",
-    "roadroller": "2.1.0"
+    "roadroller": "2.1.0",
+    "svgo": "4.1.0"
   },
   "name": "the-last-rainbow",
   "version": "1.0.0",

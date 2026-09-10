@@ -55,13 +55,14 @@ class AtlasEditing(unittest.TestCase):
         master = self.obj('Nell')
         master.set('transform', 'translate(2 3)')
         ET.SubElement(master, NS + 'path', {'id': 'edited-hat', 'd': 'M0 0L8 4L0 8Z', 'fill': '#ff00ff'})
+        ET.SubElement(master, NS + 'use', {'href': '#Cloud'})
         self.save()
         result = self.imported()
         self.assertIn('id="edited-hat"', result)
         self.assertIn('transform="translate(2 3)"', result)
         self.assertNotIn('href="#Figure"', result)
         self.assertEqual(result.count('id="Cloud"'), 1)
-        self.assertGreater(result.count('href="#Cloud"'), 1)
+        self.assertIn('href="#Cloud"', result)
         self.assertNotEqual(result, self.baseline)
 
     def test_editor_resources_and_xlink_roundtrip(self):

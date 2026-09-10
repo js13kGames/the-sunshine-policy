@@ -5,7 +5,7 @@ htdocs/index.html: src/index.html src/src.js bin/build.mjs bin/packing.json pack
 	python3 bin/atlas.py
 	node bin/build.mjs
 
-archive.zip: htdocs/index.html bin/archive.py
+archive.zip: htdocs/index.html bin/archive.py bin/deflate.mjs package-lock.json
 	python3 bin/archive.py
 
 atlas:
