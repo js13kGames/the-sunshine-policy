@@ -351,7 +351,7 @@ function talkIris() {
 		["Why isn't the mill turning?", () => say("Iris", "Dullworth closed the sluice. Said people prefer sunshine.", "Nell", "People also prefer food.", "Iris", "My tools are in the workshop. Oil the rust first, then use the spanner on the small sluice handwheel. The maintenance passage is beside it.")],
 		[state.truth ? "He has been selling the rainbows." : "How does the lantern work?", () => state.truth
 			? say("Iris", "So that's what he meant by liquid assets.", "Nell", "Can we put them back?", "Iris", "Water to turn the mill. A prism in the lantern. Light, then rain, then a living horn. And pull the release, hard.")
-			: readDiagram()],
+			: readDiagram("Iris")],
 		["I'll have a look around.", closeDialog]
 	])
 }
@@ -385,8 +385,8 @@ function talkUnicorn() {
 	}
 }
 
-function readDiagram() {
-	say("Nell", "A rainbow begins with LIGHT, passes through RAIN, and finds its way through a HORN. The three shutters go in that order, left to right.", "Nell", "Underneath: the horn must remain attached to its owner. Someone underlined that twice.")
+function readDiagram(speaker = "Nell") {
+	say(speaker, "A rainbow begins with LIGHT, passes through RAIN, and finds its way through a HORN. The three shutters go in that order, left to right.", speaker, speaker == "Iris" ? "The horn must remain attached to its owner. I underlined that twice." : "Underneath: the horn must remain attached to its owner. Someone underlined that twice.")
 }
 
 function turnSluice() {
