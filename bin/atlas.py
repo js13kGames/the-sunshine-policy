@@ -72,7 +72,7 @@ def definitions(atlas_path, manifest_path):
             for ref in refs:
                 if ref not in ids:
                     raise ValueError('Missing referenced SVG object or resource: ' + ref)
-    ET.indent(result, space=' ')
+    ET.indent(result, space='\t')
     return ET.tostring(result, encoding='unicode').replace(f' xmlns="{SVG}"', '', 1)
 
 
