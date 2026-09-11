@@ -216,7 +216,7 @@ function talkDullworth() {
 function talkIris() {
 	choose("Iris", [
 		["The minister wants the unicorn's horn.", () => say("Iris", "Of course he does. When a clock stops, he asks for the hands.", "Nell", "Can a horn really make a rainbow?", "Iris", "On a living unicorn. They carry the rain across the sky. No rainbow, no way home.", "Nell", "There's one down in the meadow.", "Iris", "Then someone has left it a long way from home.")],
-		["Why isn't the mill turning?", () => say("Iris", "Dullworth closed the sluice. Said people prefer sunshine.", "Nell", "People also prefer food.", "Iris", "My tools are in the workshop. Oil the rust first, then use the spanner on the small sluice handwheel. The maintenance passage is beside it.")],
+		state.water ? null : ["Why isn't the mill turning?", () => say("Iris", "Dullworth closed the sluice. Said people prefer sunshine.", "Nell", "People also prefer food.", "Iris", "My tools are in the workshop. Oil the rust first, then use the spanner on the small sluice handwheel. The maintenance passage is beside it.")],
 		[state.truth ? "He has been selling the rainbows." : "How does the lantern work?", () => state.truth
 			? say("Iris", "So that's what he meant by liquid assets.", "Nell", "Can we put them back?", "Iris", "Water to turn the mill. A prism in the lantern. Light, then rain, then a living horn. And pull the release, hard.")
 			: readDiagram("Iris")],
@@ -493,7 +493,7 @@ function choose(who, options) {
 	$("words").textContent = ""
 	$("next").hidden = true
 	$("choices").replaceChildren()
-	for (const [text, action] of options) {
+	for (const [text, action] of options.filter(option => option != null)) {
 		const button = document.createElement("button")
 		button.textContent = "› " + text
 		button.onclick = event => {
