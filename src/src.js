@@ -119,10 +119,10 @@ const scenes = {
 		set("Bench", 88, 58)
 		hotspot("diagram", "Read the rainbow diagram", 91, 22, 40, 29, readDiagram)
 		if (!state.taken.includes("Oil")) {
-			set("Oil", 92, 53, .45, "Take the oil can", () => take("Oil", "It says: FOR STUBBORN MACHINERY. Pity it doesn't work on ministers."))
+			set("Oil", 102, 50, .45, "Take the oil can", () => take("Oil", "It says: FOR STUBBORN MACHINERY. Pity it doesn't work on ministers."))
 		}
 		if (!state.taken.includes("Spanner")) {
-			set("Spanner", 126, 55, .38, "Take the spanner", () => take("Spanner", "A spanner. Finally, a tool I was actually trained to use.")).firstElementChild.setAttribute("transform", "translate(0 8) scale(1 .5) rotate(60 10 15)")
+			set("Spanner", 126, 56, .38, "Take the spanner", () => take("Spanner", "A spanner. Finally, a tool I was actually trained to use.")).firstElementChild.setAttribute("transform", "translate(0 8) scale(1 .5) rotate(60 10 15)")
 		}
 		protagonist(60, 53, .9)
 		exit("outside", "Outside to Iris", 10, 87, "Mill", -1)
