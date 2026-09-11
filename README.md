@@ -25,8 +25,8 @@ Alternatively, run `make serve` and visit
 - Click an inventory item to use it in the current scene. No dragging.
 - Click or press Space to advance dialogue. Choices wait for your answer.
 - On touchscreens, slide a finger to inspect; lift it to interact.
-- H reveals hotspots. Tab and Enter also work.
-- Help offers a contextual hint and a restart option.
+- Tab and Enter also work.
+- Help offers a contextual hint.
 
 Reloading starts a new game. There are no timed puzzles, deaths, or
 consumable mistakes. Landscape gives a larger view on a phone; portrait is supported.
