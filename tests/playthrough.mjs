@@ -66,14 +66,16 @@ async function run(mobile, reverse = false) {
 	const item = async name => click(`#inventory button[aria-label="Use ${name}"]`)
 	const has = async name => page.locator(`#inventory button[aria-label="Use ${name}"]`).count()
 	const at = async name => { assert.equal(await page.locator('#location').textContent(), name); ++checks }
-	const clear = async () => {
+	const clear = async pending => {
 		for (let n = 0; await page.locator('#bubble').isVisible(); ++n) {
 			assert.ok(n < 35, 'Dialog failed to finish')
+			if (pending) { assert.equal(await has(pending), 0, `${pending} arrived before the conversation ended`); ++checks }
 			assert.equal(await page.locator('#choices button').count(), 0, 'Unexpected choice')
 			if (mobile) { await click('#bubble') } else { await page.keyboard.press('Space') }
 		}
+		if (pending) { assert.equal(await has(pending), 1); ++checks }
 	}
-	const act = async id => { await click(`[data-action="${id}"]`); await clear() }
+	const act = async (id, pending) => { await click(`[data-action="${id}"]`); await clear(pending) }
 	const snap = async name => {
 		const layout = await page.evaluate(() => ({ x: scrollX, width: innerWidth, frame: document.getElementById('frame').getBoundingClientRect().toJSON(), scale: visualViewport.scale }))
 		if (mobile && (layout.x || layout.frame.x < 0)) { console.log('LAYOUT', name, layout) }
@@ -86,15 +88,21 @@ async function run(mobile, reverse = false) {
 	await click('#start')
 	// Resizing during a conversation must not replay or discard it.
 	const opening = await page.locator('#words').textContent()
+	await click('#help')
+	assert.equal(await page.locator('#restart').count(), 0)
+	await click('#hint')
+	assert.equal(await page.locator('#words').textContent(), opening)
+	assert.equal(await has('Royal order'), 0)
+	checks += 3
 	if (!mobile) {
 		await page.setViewportSize({ width: 1100, height: 720 })
 		assert.equal(await page.locator('#words').textContent(), opening)
 		await page.setViewportSize({ width: 1280, height: 800 })
 	}
-	await clear()
+	await clear('Royal order')
 	assert.equal(await has('Royal order'), 1)
 	await snap('court')
-	await act('Biscuit')
+	await act('Biscuit', 'Biscuit')
 	await travel('toMill')
 	await click('[data-action="Iris"]')
 	await page.getByRole('button', {name:'How does the lantern work?',exact:false}).click()
@@ -114,8 +122,8 @@ async function run(mobile, reverse = false) {
 		assert.equal(await page.locator('#speaker').textContent(), 'Nell')
 		await clear()
 		checks += 4
-		await act('Oil')
-		await act('Spanner')
+		await act('Oil', 'Oil can')
+		await act('Spanner', 'Spanner')
 		await snap('workshop')
 		await travel('outside', 'sluice')
 		await click('[data-action="Crank"]')
@@ -136,7 +144,7 @@ async function run(mobile, reverse = false) {
 		await snap('sluice')
 		await travel(reverse ? 'passage' : 'engine')
 		await act('tank')
-		await act('Ledger')
+		await act('Ledger', 'Sales ledger')
 		await act('lever')
 		await snap('engine')
 		await travel('ladder')
@@ -160,7 +168,7 @@ async function run(mobile, reverse = false) {
 	await clear()
 	assert.equal(await has('Biscuit'), 1)
 	await act('Bird')
-	await item('Royal order'); await clear()
+	await item('Royal order'); await clear('Brass key')
 	assert.equal(await has('Royal order'), 0)
 	assert.equal(await has('Brass key'), 1)
 	await item('Brass key'); await clear()
@@ -171,10 +179,10 @@ async function run(mobile, reverse = false) {
 		await toolsAndWater()
 		await travel('meadow')
 	}
-	await act('Unicorn')
+	await act('Unicorn', 'Unicorn hair')
 	assert.equal(await has('Unicorn hair'), 1)
 	await travel('mill', 'palace')
-	await item('Sales ledger'); await clear()
+	await item('Sales ledger'); await clear('Prism')
 	assert.equal(await has('Prism'), 1)
 	await travel('toMill', 'sluice', 'engine')
 	await item('Unicorn hair'); await clear()
