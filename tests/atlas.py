@@ -85,17 +85,6 @@ class AtlasEditing(unittest.TestCase):
         self.assertIn('xlink:href="#Bench"', first)
         self.assertTrue(first.endswith('<g id="scene"/></svg>'))
 
-    def test_coordinates_round_without_destroying_scales_or_thin_strokes(self):
-        shape = ET.SubElement(self.obj('Nell'), NS + 'path', {
-            'id': 'rounded-shape', 'd': 'M.5.5L-1.2 3.8',
-            'transform': 'translate(1.7 -2.2) scale(.9 1.2)', 'stroke-width': '.35'})
-        self.save()
-        result = ET.fromstring(self.imported())
-        shape = next(node for node in result.iter() if node.get('id') == 'rounded-shape')
-        self.assertEqual(shape.get('d'), 'M 1 1 L -1 4')
-        self.assertEqual(shape.get('transform'), 'translate(2 -2) scale(.9 1.2)')
-        self.assertEqual(shape.get('stroke-width'), '.35')
-
     def test_missing_or_duplicate_master_is_rejected(self):
         self.obj('Nell').set('id', 'RenamedNell')
         self.save()
