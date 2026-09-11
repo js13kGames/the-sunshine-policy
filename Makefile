@@ -1,11 +1,13 @@
-.PHONY: all atlas clean serve test
-all: archive.zip
+BUILD = htdocs/index.html
+ARCHIVE = archive.zip
 
-htdocs/index.html: src/index.html src/src.js bin/build.mjs bin/packing.json package-lock.json svg/atlas.svg svg/atlas.json bin/atlas.py
+all: $(ARCHIVE)
+
+$(BUILD): src/index.html src/src.js bin/build.mjs bin/packing.json package-lock.json svg/atlas.svg svg/atlas.json bin/atlas.py
 	python3 bin/atlas.py
 	node bin/build.mjs
 
-archive.zip: htdocs/index.html bin/archive.py bin/deflate.mjs package-lock.json
+$(ARCHIVE): $(BUILD) bin/archive.py bin/deflate.mjs package-lock.json
 	python3 bin/archive.py
 
 atlas:
@@ -19,4 +21,7 @@ test: all
 	node tests/playthrough.mjs
 
 clean:
-	rm -f htdocs/index.html archive.zip
+	rm -f $(BUILD) $(ARCHIVE)
+
+up:
+	scp $(BUILD) hhsw.de@ssh.strato.de:sites/proto/js13k2026
