@@ -88,7 +88,7 @@ const scenes = {
 		$("MillWater").style.color = state.water ? "#82afb3" : "#7a8076"
 		$("MillCurrent").style.visibility = state.water ? "visible" : "hidden"
 		set("MillScene", 0, 0)
-		const wheel = set("Wheel", 108, 55, 1.2)
+		const wheel = set("Wheel", 111, 55, 1.2)
 		if (state.water) {
 			wheel.firstElementChild.classList.add("turn")
 		}
