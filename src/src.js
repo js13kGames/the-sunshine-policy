@@ -76,8 +76,8 @@ const scenes = {
 		if (!state.prism) {
 			set("Prism", 113, 54, .38, "The minister's glass paperweight", () => say("Dullworth", "My paperweight. It keeps the weather reports from blowing away. Such gloomy little reports."))
 		}
-		set("Dullworth", 84, 43, .95, "Talk to Minister Dullworth", talkDullworth)
-		protagonist(49, 54)
+		set("Dullworth", 84, 41, .95, "Talk to Minister Dullworth", talkDullworth)
+		protagonist(47, 54)
 		if (!state.taken.includes("Biscuit")) {
 			set("Biscuit", 28, 73, .3, "Take the neglected biscuit", () => take("Biscuit", "A royal biscuit. Hard enough to inherit the throne.")).firstElementChild.setAttribute("transform", "scale(1 .4)")
 		}
@@ -88,11 +88,11 @@ const scenes = {
 		$("MillWater").style.color = state.water ? "#82afb3" : "#7a8076"
 		$("MillCurrent").style.visibility = state.water ? "visible" : "hidden"
 		set("MillScene", 0, 0)
-		const wheel = set("Wheel", 108, 60, 1.2)
+		const wheel = set("Wheel", 108, 55, 1.2)
 		if (state.water) {
 			wheel.firstElementChild.classList.add("turn")
 		}
-		set("Iris", 27, 48, .9, "Talk to Iris, the old keeper", talkIris)
+		set("Iris", 23, 51, .9, "Talk to Iris, the old keeper", talkIris)
 		protagonist(51, 58)
 		hotspot("workshop", "Enter the keeper's workshop", 64, 46, 16, 26, () => show("Workshop"))
 		exit("palace", "Back to the palace", 12, 52, "Court", -1)
@@ -177,7 +177,7 @@ const scenes = {
 			})
 		}
 		protagonist(43, 51, .8)
-		exit("down", "Down to the engine", 37, 81, "Engine", -1)
+		exit("down", "Down to the engine", 16, 81, "Engine", -1)
 	},
 	Bridge: function() {
 		set("BridgeScene", 0, 0)
