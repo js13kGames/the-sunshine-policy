@@ -168,11 +168,14 @@ const scenes = {
 			hotspot("cradle", "An empty triangular cradle", 70, 26, 28, 22, () => say("Nell", "A triangular cradle. About the size of a certain royal paperweight."))
 		}
 		for (let i = 0; i < 3; ++i) {
-			const x = 69 + i * 15
-			set(["Sun", "Drop", "Horn"][state.shutters[i]], x, 60, .48)
-			hotspot("dial" + i, `Shutter ${i + 1}: ${["Light", "Rain", "Horn"][state.shutters[i]]}. Click to turn.`, x - 5.5, 54.5, 11, 11, () => {
+			const x = 69 + i * 15,
+				symbol = set(["Sun", "Drop", "Horn"][state.shutters[i]], x, 60, .48),
+				name = () => `Shutter ${i + 1}: ${["Light", "Rain", "Horn"][state.shutters[i]]}. Click to turn.`
+			hotspot("dial" + i, name(), x - 5.5, 54.5, 11, 11, () => {
 				state.shutters[i] = (state.shutters[i] + 1) % 3
-				show("Roof")
+				symbol.firstElementChild.setAttribute("href", "#" + ["Sun", "Drop", "Horn"][state.shutters[i]])
+				actions["dial" + i].name = name()
+				anchors["dial" + i].setAttribute("aria-label", name())
 				info(aligned() ? "Light → Rain → Horn. The shutters line up." : "Turn the shutters. The workshop diagram showed the order.")
 			})
 		}

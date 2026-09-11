@@ -142,7 +142,15 @@ async function run(mobile, reverse = false) {
 		await travel('ladder')
 		await snap('roof')
 		// Every initial shutter is one turn away from its correct symbol.
+		const roof = await page.locator('#world > g').first().elementHandle()
+		await page.evaluate(() => { window.cloudClocks = document.getAnimations().filter(a => a.animationName == 'drift').map(a => [a, a.currentTime]) })
 		await act('dial0'); await act('dial1'); await act('dial2')
+		assert.equal(await roof.evaluate(node => node.isConnected), true, 'Shutters must retain the scene and its animated clouds')
+		assert.equal(await page.evaluate(() => window.cloudClocks.every(([a, time]) => document.getAnimations().includes(a) && a.currentTime >= time)), true)
+		for (const [i, symbol] of ['Light', 'Rain', 'Horn'].entries()) {
+			assert.match(await page.locator(`[data-action="dial${i}"]`).getAttribute('aria-label'), new RegExp(symbol))
+		}
+		checks += 5
 		await travel('down', 'spillway', 'mill')
 	}
 	if (reverse) { await toolsAndWater() }
