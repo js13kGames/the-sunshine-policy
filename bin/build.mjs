@@ -15,8 +15,21 @@ const collapseStaticGroups = {
 	}
 }
 
+const removeEmptyStaticContainers = {
+	name: 'removeEmptyStaticContainers',
+	fn(root) {
+		const visitor = builtinPlugins.find(plugin => plugin.name == 'removeEmptyContainers').fn(root)
+		const remove = visitor.element.exit
+		visitor.element.exit = (node, parent) => {
+			// Preserve empty nodes that the game fills or animates at runtime.
+			if (!node.attributes.id && !node.attributes.class) { remove(node, parent) }
+		}
+		return visitor
+	}
+}
+
 function minify(source, loader) {
-	return transformSync(source, { minify: true, target: 'es2020', charset: 'utf8', loader, ...(loader == 'js' ? { format: 'iife' } : {}) }).code.trim()
+	return transformSync(source, { minify: true, target: 'es2020', charset: 'utf8', loader, ...(loader == 'js' ? { format: 'iife', mangleProps: /^(scene|inventory|taken|shutters|water|prism|free|fed|truth|hair|cord|mounted|bridge|ended|oiled)$/ } : {}) }).code.trim()
 }
 const script = minify(readFileSync('src/src.js', 'utf8'), 'js')
 const html = readFileSync('src/index.html', 'utf8')
@@ -26,7 +39,11 @@ const html = readFileSync('src/index.html', 'utf8')
 		{ name: 'convertShapeToPath', params: { floatPrecision: 8 } },
 		{ name: 'mergePaths', params: { floatPrecision: 8 } },
 		{ name: 'convertPathData', params: { floatPrecision: 8, applyTransforms: false, straightCurves: false, convertToQ: false, makeArcs: { threshold: 0, tolerance: 0 }, smartArcRounding: false } },
-		'removeEmptyAttrs'
+		'removeEmptyAttrs',
+		removeEmptyStaticContainers,
+		'convertStyleToAttrs',
+		'convertColors',
+		'sortAttrs'
 	] }).data)
 	.replace(/<style>([\s\S]*?)<\/style>/, (_, css) => `<style>${minify(css, 'css')}</style>`)
 	.replace(/<script src="src.js"><\/script>/, () => `<script>${script}</script>`)
