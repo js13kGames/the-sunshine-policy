@@ -443,8 +443,6 @@ function render() {
 	scenes[state.scene]()
 	$("location").textContent = sceneNames[state.scene]
 	inventory()
-	stage.classList.remove("reveal")
-	$("hotspots").setAttribute("aria-pressed", "false")
 }
 
 function show(name) {
@@ -568,16 +566,11 @@ stage.onpointerleave = () => info()
 bubble.onclick = () => nextLine()
 window.onresize = positionBubble
 
-function toggleHotspots() {
-	const shown = stage.classList.toggle("reveal")
-	$("hotspots").setAttribute("aria-pressed", String(shown))
-}
-
 function help() {
 	if (!$("menu").hidden || !$("cover").hidden) {
 		return
 	}
-	$("menu").innerHTML = '<h2>A little help?</h2><p>Click people and objects. Click inventory items to use them here.</p><p>Click / Space: next line. H: hotspots. Tab / Enter: select.<br>Touch: slide to explore, lift to interact.</p><button class="primary" id="back">Back to the adventure</button><button class="primary secondary" id="hint">A gentle nudge</button><button class="primary secondary" id="restart">Start over</button>'
+	$("menu").innerHTML = '<h2>A little help?</h2><p>Click people and objects. Click inventory items to use them here.</p><p>Click / Space: next line. Tab / Enter: select.<br>Touch: slide to explore, lift to interact.</p><button class="primary" id="back">Back to the adventure</button><button class="primary secondary" id="hint">A gentle nudge</button><button class="primary secondary" id="restart">Start over</button>'
 	$("menu").hidden = false
 	$("back").onclick = () => { $("menu").hidden = true }
 	$("hint").onclick = () => {
@@ -609,7 +602,6 @@ function newGame() {
 	})
 }
 
-$("hotspots").onclick = toggleHotspots
 $("help").onclick = help
 $("start").onclick = newGame
 window.addEventListener("keydown", event => {
@@ -620,8 +612,7 @@ window.addEventListener("keydown", event => {
 		$("menu").hidden = true
 	} else if (!$("menu").hidden) {
 		return
-	} else if (event.key.toLowerCase() == "h") {
-		toggleHotspots()
+
 	} else if (event.key == " " && !bubble.hidden && !choosing) {
 		event.preventDefault()
 		nextLine()
