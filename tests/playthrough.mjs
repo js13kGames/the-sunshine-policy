@@ -53,6 +53,45 @@ async function verifyCloudMotion(page) {
 		}
 	}
 }
+async function verifyRainMotion(page) {
+	const result = await page.evaluate(async () => {
+		const probe = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+		probe.setAttribute('viewBox', '0 0 160 100')
+		probe.style.cssText = 'position:fixed;width:160px;height:100px;opacity:0;pointer-events:none'
+		const rain = document.getElementById('Rain').cloneNode(true)
+		probe.append(rain)
+		document.body.append(probe)
+		try {
+			const moving = rain.querySelector('.rain'), animation = moving.getAnimations()[0]
+			animation.pause()
+			animation.effect.updateTiming({ iterations: 1, fill: 'forwards' })
+			const duration = animation.effect.getTiming().duration, frames = []
+			for (const time of [0, duration / 2, duration]) {
+				animation.currentTime = time
+				const frame = rain.cloneNode(true)
+				frame.querySelector('.rain').setAttribute('style', `transform:${getComputedStyle(moving).transform}`)
+				const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="400" viewBox="0 0 160 100">${new XMLSerializer().serializeToString(frame)}</svg>`
+				const image = new Image(), url = URL.createObjectURL(new Blob([svg], { type: 'image/svg+xml' }))
+				try {
+					image.src = url
+					await image.decode()
+					const canvas = document.createElement('canvas')
+					canvas.width = 640; canvas.height = 400
+					const context = canvas.getContext('2d')
+					context.drawImage(image, 0, 0)
+					frames.push(context.getImageData(0, 0, 640, 400).data)
+				} finally { URL.revokeObjectURL(url) }
+			}
+			const difference = (a, b) => a.reduce((sum, value, i) => sum + (Math.abs(value - b[i]) > 2 ? 1 : 0), 0)
+			return { seam: difference(frames[0], frames[2]), motion: difference(frames[0], frames[1]), visible: frames[0].some(value => value > 0) }
+		} finally { probe.remove() }
+	})
+	assert.equal(result.visible, true, 'Rain must be visible')
+	assert.equal(result.seam, 0, 'The final rain frame must tile exactly into the first')
+	assert.ok(result.motion > 100, 'Rain must move between loop boundaries')
+	checks += 3
+}
+
 async function run(mobile, reverse = false) {
 	const context = await browser.newContext(mobile ? { viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true } : { viewport: { width: 1280, height: 800 } })
 	// An old saved game must not enable Continue or restore its inventory.
@@ -61,7 +100,7 @@ async function run(mobile, reverse = false) {
 	page.on('pageerror', error => (errors.push(error.message), console.error('BROWSER', error.message)))
 	page.on('console', message => { if (message.type() == 'error' && !message.text().includes('404')) { errors.push(message.text()) } })
 	await page.goto(base)
-	if (!mobile && !reverse) { await verifyCloudMotion(page) }
+	if (!mobile && !reverse) { await verifyCloudMotion(page); await verifyRainMotion(page) }
 	const click = async selector => mobile ? page.locator(selector).tap() : page.locator(selector).click()
 	const item = async name => click(`#inventory button[aria-label="Use ${name}"]`)
 	const has = async name => page.locator(`#inventory button[aria-label="Use ${name}"]`).count()
