@@ -573,7 +573,7 @@ function help() {
 	if (!$("menu").hidden || !$("cover").hidden) {
 		return
 	}
-	$("menu").innerHTML = '<h2>A little help?</h2><p>Click people and objects. Click inventory items to use them here.</p><p>Click / Space: next line. Tab / Enter: select.<br>Touch: slide to explore, lift to interact.</p><button class="primary" id="back">Back to the adventure</button><button class="primary secondary" id="hint">A gentle nudge</button><button class="primary secondary" id="restart">Start over</button>'
+	$("menu").innerHTML = '<h2>A little help?</h2><p>Click people and objects. Click inventory items to use them here.</p><p>Click / Space: next line. Tab / Enter: select.<br>Touch: slide to explore, lift to interact.</p><button class="primary" id="back">Back to the adventure</button><button class="primary secondary" id="hint">A gentle nudge</button>'
 	$("menu").hidden = false
 	$("back").onclick = () => { $("menu").hidden = true }
 	$("hint").onclick = () => {
@@ -585,11 +585,7 @@ function help() {
 			say("Nell", hintText())
 		}
 	}
-	$("restart").onclick = () => {
-		$("menu").innerHTML = '<h2>Start a new adventure?</h2><p>This starts the story from the beginning.</p><button class="primary" id="yes">Start over</button><button class="primary secondary" id="no">Keep playing</button>'
-		$("yes").onclick = newGame
-		$("no").onclick = () => { $("menu").hidden = true }
-	}
+
 }
 
 function newGame() {
