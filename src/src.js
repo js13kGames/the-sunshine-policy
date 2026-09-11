@@ -140,7 +140,7 @@ const scenes = {
 		hotspot("passage", "Enter the maintenance passage", 124, 44, 20, 28, () => show("Engine"))
 		protagonist(25, 48, .8)
 		exit("mill", "Back to the mill", 10, 87, "Mill", -1)
-		exit("engine", "The maintenance passage", 135, 70, "Engine")
+		exit("engine", "The maintenance passage", 120, 60, "Engine")
 	},
 	Engine: function() {
 		$("ReleaseCord").style.visibility = state.cord ? "visible" : "hidden"
@@ -163,7 +163,7 @@ const scenes = {
 		$("Sunbeam").style.visibility = state.mounted ? "visible" : "hidden"
 		set("RoofScene", 0, 0)
 		if (state.mounted) {
-			set("Prism", 72, 24, .8, "The prism in its cradle", () => say("Nell", aligned() ? "Light. Rain. Horn. The lantern is ready." : "The prism is back. Now to open the shutters in the right order."))
+			set("Prism", 72, 26, .8, "The prism in its cradle", () => say("Nell", aligned() ? "Light. Rain. Horn. The lantern is ready." : "The prism is back. Now to open the shutters in the right order."))
 		} else {
 			hotspot("cradle", "An empty triangular cradle", 70, 26, 28, 22, () => say("Nell", "A triangular cradle. About the size of a certain royal paperweight."))
 		}
@@ -177,12 +177,12 @@ const scenes = {
 			})
 		}
 		protagonist(43, 51, .8)
-		exit("down", "Down to the engine", 38, 81, "Engine", -1)
+		exit("down", "Down to the engine", 37, 81, "Engine", -1)
 	},
 	Bridge: function() {
 		set("BridgeScene", 0, 0)
 		set("Unicorn", 26, 40, .9, "Cross the rainbow with Morrow", finish).firstElementChild.setAttribute("transform", "translate(56 0) scale(-1 1)")
-		protagonist(6, 56)
+		protagonist(6, 50)
 		hotspot("cross", "Cross the rainbow with Morrow", 72, 30, 76, 49, finish)
 	},
 	End: function() {
