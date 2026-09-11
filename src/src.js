@@ -238,11 +238,9 @@ function talkUnicorn() {
 	} else if (!state.fed) {
 		say("Nell", "You're free. You can go.", "Unicorn", "…", "Nell", "Or you could eat first. You look like I feel at the end of a shift.")
 	} else if (state.truth && !state.hair) {
-		say("Nell", "I found the rainbow. Dullworth has it in a tank under the mill.", "Unicorn", "Then open it.", "Nell", "There's a release lever. Its cord has snapped.", "Unicorn", "Take a hair from my tail. One held up the northern lights for a winter.", "Nell", "That's a lot of responsibility for a hair.", "Unicorn", "It had help.", () => {
-			state.hair = true
-			give("Hair")
-			render()
-		})
+		state.hair = true
+		give("Hair")
+		say("Nell", "I found the rainbow. Dullworth has it in a tank under the mill.", "Unicorn", "Then open it.", "Nell", "There's a release lever. Its cord has snapped.", "Unicorn", "Take a hair from my tail. One held up the northern lights for a winter.", "Nell", "That's a lot of responsibility for a hair.", "Unicorn", "It had help.", () => render())
 	} else {
 		choose("Morrow", [
 			["You can talk?", () => say("Unicorn", "So can you. I was being polite about it.", "Nell", "I'm Nell.", "Unicorn", "Morrow. Last keeper of the western rain.")],
@@ -323,20 +321,18 @@ function consume(id) {
 }
 
 function take(id, message) {
-	say("Nell", message, () => {
-		give(id)
-		render()
-	})
+	give(id)
+	render()
+	say("Nell", message)
 }
 
 function use(id) {
 	const here = state.scene
 	if (id == "Order" && here == "Meadow" && !state.taken.includes("Key")) {
-		say("Nell", "One royal order. With a genuine gold seal.", "Bird", "Kraa!", "Nell", "Keep the paperwork. I'll take the key.", () => {
-			consume(id)
-			give("Key")
-			render()
-		})
+		consume(id)
+		give("Key")
+		render()
+		say("Nell", "One royal order. With a genuine gold seal.", "Bird", "Kraa!", "Nell", "Keep the paperwork. I'll take the key.")
 	} else if (id == "Order") {
 		say("Nell", "BRING ME THE HORN OF THE LAST UNICORN. Signed: Dullworth. The seal looks like real gold. Of course it does.")
 	} else if (id == "Key" && here == "Meadow") {
@@ -366,12 +362,11 @@ function use(id) {
 			say("Nell", "There! I'll leave the spanner wedged here to keep it open.", "Nell", "Listen. The mill is turning again.")
 		}
 	} else if (id == "Ledger" && here == "Court") {
-		say("Nell", "Your ledger. Every rainbow, every payment. Shall I read it in the market?", "Dullworth", "Give me that.", "Nell", "Give me the prism.", "Dullworth", "Fine. A worthless paperweight. It won't work without a horn.", "Nell", "So you've said.", () => {
-			consume(id)
-			state.prism = true
-			give("Prism")
-			render()
-		})
+		consume(id)
+		state.prism = true
+		give("Prism")
+		render()
+		say("Nell", "Your ledger. Every rainbow, every payment. Shall I read it in the market?", "Dullworth", "Give me that.", "Nell", "Give me the prism.", "Dullworth", "Fine. A worthless paperweight. It won't work without a horn.", "Nell", "So you've said.")
 	} else if (id == "Ledger") {
 		say("Nell", "RAINBOW RESERVE. Six gold pieces per bottle. All signed by Dullworth. He ought to see this.")
 	} else if (id == "Hair" && here == "Engine") {
