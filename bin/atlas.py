@@ -3,6 +3,7 @@
 import argparse
 import copy
 import json
+import math
 from pathlib import Path
 import re
 import xml.etree.ElementTree as ET
@@ -10,6 +11,30 @@ import xml.etree.ElementTree as ET
 SVG = 'http://www.w3.org/2000/svg'
 ET.register_namespace('', SVG)
 ET.register_namespace('xlink', 'http://www.w3.org/1999/xlink')
+
+
+
+def round_coordinates(element):
+    number = r'[-+]?(?:\d*\.\d+|\d+\.?\d*)(?:[eE][-+]?\d+)?'
+
+    def rounded(value):
+        return str(math.floor(float(value) + .5))
+
+    for attr in ('d', 'points', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'cx', 'cy', 'r', 'rx', 'ry', 'width', 'height', 'viewBox'):
+        if attr in element.attrib:
+            # Spaces keep adjacent values such as .5.5 distinct after rounding.
+            value = re.sub(number, lambda match: ' ' + rounded(match[0]) + ' ', element.get(attr))
+            element.set(attr, re.sub(r'\s+', ' ', value).strip())
+    if 'transform' in element.attrib:
+        def transform(match):
+            kind, args = match.groups()
+            values = re.findall(number, args)
+            # Matrix coefficients and scales are ratios, not coordinates.
+            for i, value in enumerate(values):
+                if kind in ('translate', 'rotate') or (kind == 'matrix' and i >= 4):
+                    values[i] = rounded(value)
+            return kind + '(' + ' '.join(values) + ')'
+        element.set('transform', re.sub(r'(\w+)\(([^)]*)\)', transform, element.get('transform')))
 
 
 def definitions(atlas_path, manifest_path):
@@ -59,6 +84,8 @@ def definitions(atlas_path, manifest_path):
             parent.text = None
         if parent.tail and not parent.tail.strip():
             parent.tail = None
+    for element in result.iter():
+        round_coordinates(element)
     ids = [element.get('id') for element in result.iter() if element.get('id')]
     if len(ids) != len(set(ids)):
         raise ValueError('An object master also occurs in SVG resources')

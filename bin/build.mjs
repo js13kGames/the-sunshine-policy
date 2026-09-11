@@ -20,12 +20,12 @@ function minify(source, loader) {
 }
 const script = minify(readFileSync('src/src.js', 'utf8'), 'js')
 const html = readFileSync('src/index.html', 'utf8')
-	// Compact editor-expanded path syntax without rounding artwork or changing IDs.
+	// Compact editor-expanded path syntax with integer coordinates and stable IDs.
 	.replace(/<svg[\s\S]*?<\/svg>/, svg => optimize(svg, { plugins: [
 		collapseStaticGroups,
-		{ name: 'convertShapeToPath', params: { floatPrecision: 8 } },
-		{ name: 'mergePaths', params: { floatPrecision: 8 } },
-		{ name: 'convertPathData', params: { floatPrecision: 8, applyTransforms: false, straightCurves: false, convertToQ: false, makeArcs: { threshold: 0, tolerance: 0 }, smartArcRounding: false } },
+		{ name: 'convertShapeToPath', params: { floatPrecision: 0 } },
+		{ name: 'mergePaths', params: { floatPrecision: 0 } },
+		{ name: 'convertPathData', params: { floatPrecision: 0, applyTransforms: false, straightCurves: false, convertToQ: false, makeArcs: { threshold: 0, tolerance: 0 }, smartArcRounding: false } },
 		'removeEmptyAttrs'
 	] }).data)
 	.replace(/<style>([\s\S]*?)<\/style>/, (_, css) => `<style>${minify(css, 'css')}</style>`)
