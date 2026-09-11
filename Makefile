@@ -3,8 +3,7 @@ ARCHIVE = archive.zip
 
 all: $(ARCHIVE)
 
-$(BUILD): src/index.html src/src.js bin/build.mjs bin/packing.json package-lock.json svg/atlas.svg svg/atlas.json bin/atlas.py
-	python3 bin/atlas.py
+$(BUILD): atlas src/index.html src/src.js bin/build.mjs bin/packing.json package-lock.json svg/atlas.svg svg/atlas.json bin/atlas.py
 	node bin/build.mjs
 
 $(ARCHIVE): $(BUILD) bin/archive.py bin/deflate.mjs package-lock.json
