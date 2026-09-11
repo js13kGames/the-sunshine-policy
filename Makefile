@@ -13,9 +13,6 @@ $(ARCHIVE): $(BUILD) bin/archive.py bin/deflate.mjs package-lock.json
 atlas:
 	python3 bin/atlas.py
 
-serve: atlas
-	python3 -m http.server 8080 --bind 127.0.0.1
-
 test: all
 	python3 tests/atlas.py
 	node tests/playthrough.mjs
