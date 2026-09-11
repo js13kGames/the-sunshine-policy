@@ -12,7 +12,6 @@
   "description": "A small SVG adventure about unicorns and rainbows",
   "scripts": {
     "build": "make",
-    "serve": "make serve",
     "test": "make test"
   },
   "engines": {
