@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1466">
-  <title>The Last Rainbow — scenes and objects</title>
+  <title>The Sunshine Policy — scenes and objects</title>
   <desc>Complete backgrounds, whole figures and independent objects. Edit the named groups. slot-* transforms and atlas labels only arrange this sheet. make imports the masters into the game; it never overwrites this atlas.</desc>
   <rect id="atlas-background" width="1080" height="1466" fill="#202733"/>
-  <text x="20" y="30" font-family="sans-serif" font-size="22" fill="#f1d398" style="white-space: pre;">THE LAST RAINBOW · SCENES AND OBJECTS</text>
+  <text x="20" y="30" font-family="sans-serif" font-size="22" fill="#f1d398" style="white-space: pre;">THE SUNSHINE POLICY · SCENES AND OBJECTS</text>
   <text x="20" y="52" font-family="sans-serif" font-size="11" fill="#c6c9c9" style="white-space: pre;">Edit whole scenes and objects. Keep IDs. Sheet positions are independent of game positions.</text>
   <text x="20" y="82" font-family="sans-serif" font-size="15" fill="#f1d398" style="white-space: pre;">Figures</text>
   <rect id="cell-Nell" x="8" y="94" width="164" height="124" rx="3" fill="#38454f"/>

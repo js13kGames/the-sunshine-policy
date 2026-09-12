@@ -1,6 +1,6 @@
-# The Last Rainbow
+# The Sunshine Policy
 
-<img src="svg/screenshot-400x250.jpg" alt="The Last Rainbow Screenshot"/>
+<img src="svg/screenshot-400x250.jpg" alt="The Sunshine Policy Screenshot"/>
 
 A short point-and-click adventure about unicorns, rainbows, and a perfectly
 reasonable royal request in 13 kilobytes for [js13kGames][js13kgames] 2026.
