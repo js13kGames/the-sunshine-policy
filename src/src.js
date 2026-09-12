@@ -140,7 +140,6 @@ const scenes = {
 		hotspot("passage", "Enter the maintenance passage", 124, 44, 20, 28, () => show("Engine"))
 		protagonist(25, 48, .8)
 		exit("mill", "Back to the mill", 10, 87, "Mill", -1)
-		exit("engine", "The maintenance passage", 120, 60, "Engine")
 	},
 	Engine: function() {
 		$("ReleaseCord").style.visibility = state.cord ? "visible" : "hidden"
