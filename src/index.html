@@ -6,13 +6,13 @@
 <meta name="theme-color" content="#232536">
 <title>The Last Rainbow</title>
 <style>
-* { box-sizing: border-box; }
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 html { background: #171b2b; color: #fff5de; }
 body { margin: 0; font: 600 16px/1.45 system-ui, sans-serif; overscroll-behavior: none; user-select: none; }
 button { font: inherit; color: inherit; cursor: pointer; }
 button:focus-visible, [role=button]:focus-visible { outline: 2px solid #f9d886; outline-offset: 4px; }
 #frame { position: absolute; width: min(100vw, 160vh); width: min(100vw, 160svh); aspect-ratio: 8/5; inset: 0; margin: auto; overflow: hidden; background: #303749; }
-#stage { display: block; width: 100%; height: 100%; touch-action: none; }
+#stage { display: block; width: 100%; height: 100%; touch-action: none; outline: none; }
 #stage [role=button] { cursor: pointer; outline: none; }
 .hit { fill: transparent; }
 #hud { position: absolute; left: 3%; right: 3%; top: 3%; display: flex; align-items: start; justify-content: space-between; pointer-events: none; }

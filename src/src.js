@@ -591,6 +591,7 @@ function newGame() {
 	state = freshState()
 	$("menu").hidden = true
 	$("cover").hidden = true
+	$("hud").style.visibility = $("footer").style.visibility = "visible"
 	show("Court")
 	stage.setAttribute("tabindex", "-1")
 	stage.focus()
@@ -621,9 +622,3 @@ state.scene = "Meadow"
 render()
 $("hud").style.visibility = "hidden"
 $("footer").style.visibility = "hidden"
-$("cover").addEventListener("click", () => {
-	if ($("cover").hidden) {
-		$("hud").style.visibility = "visible"
-		$("footer").style.visibility = "visible"
-	}
-})
